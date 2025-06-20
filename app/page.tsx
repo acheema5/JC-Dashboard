@@ -1,15 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { QuickStats } from './components/QuickStats';
-import { AppointmentsOverview } from './components/AppointmentsOverview';
-import { Calendar } from './components/Calendar';
-import { PastBookings } from './components/PastBookings';
-import { InventoryTracking } from './components/InventoryTracking';
-import { AIInsights } from './components/AIInsights';
-import { HaircutStats } from './components/HaircutStats';
-import { Card } from './card';
-import { Button } from './button';
+import { QuickStatsCard } from './components/QuickStatsCard';
+import { AppointmentsOverviewCard } from './components/AppointmentsOverviewCard';
+import { HaircutAnalyticsCard } from './components/HaircutAnalyticsCard';
+import { AIInsightsCard } from './components/AIInsightsCard';
+import { CalendarCard } from './components/CalendarCard';
+import { ClientHistoryCard } from './components/ClientHistoryCard';
+import { InventoryTrackingCard } from './components/InventoryTrackingCard';
+import { DataExportCard } from './components/DataExportCard';
+import { QuickActionsCard } from './components/QuickActionsCard';
 import {
   Appointment,
   InventoryItem,
@@ -356,52 +356,60 @@ export default function BarberDashboard() {
             Barber Shop Dashboard
           </h1>
           <p className="text-gray-600">
-            Manage your business with intelligent insights
+            Modern card-based business management with automation-ready features
           </p>
         </div>
 
-        {/* Quick Stats */}
-        <QuickStats
+        {/* Quick Stats Card */}
+        <QuickStatsCard
           revenue={dashboardStats.revenue}
           spending={dashboardStats.spending}
           profit={dashboardStats.profit}
         />
 
-        {/* Main Grid */}
+        {/* Main Grid - Responsive Card Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {/* Appointments Overview */}
-          <AppointmentsOverview
+          {/* Appointments Overview Card */}
+          <AppointmentsOverviewCard
             stats={dashboardStats}
             nextAppointment={nextAppointment}
             onRunningLate={handleRunningLate}
           />
 
-          {/* Haircut Stats */}
-          <HaircutStats stats={dashboardStats} appointments={appointments} />
+          {/* Haircut Analytics Card */}
+          <HaircutAnalyticsCard
+            stats={dashboardStats}
+            appointments={appointments}
+          />
 
-          {/* AI Insights */}
-          <AIInsights
+          {/* AI Insights Card */}
+          <AIInsightsCard
             onSendSMS={handleSendSMS}
             onCreatePromotion={handleCreatePromotion}
           />
 
-          {/* Calendar */}
-          <Calendar appointments={appointments} />
+          {/* Calendar Card */}
+          <CalendarCard appointments={appointments} />
 
-          {/* Past Bookings */}
-          <PastBookings
+          {/* Client History Card */}
+          <ClientHistoryCard
             appointments={appointments}
-            onExportCSV={handleExportCSV}
             onSendFollowUp={handleSendFollowUp}
           />
 
-          {/* Inventory Tracking */}
-          <InventoryTracking
+          {/* Inventory Tracking Card */}
+          <InventoryTrackingCard
             inventory={inventory}
             onReorderItem={handleReorderItem}
             onUpdateThreshold={handleUpdateThreshold}
             onToggleAutoReorder={handleToggleAutoReorder}
           />
+
+          {/* Data Export Card */}
+          <DataExportCard onExportCSV={handleExportCSV} />
+
+          {/* Quick Actions Card */}
+          <QuickActionsCard onSendSMS={handleSendSMS} />
         </div>
       </div>
     </div>
