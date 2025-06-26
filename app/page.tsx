@@ -6,7 +6,7 @@ import { AppointmentsOverviewCard } from './components/AppointmentsOverviewCard'
 import { HaircutAnalyticsCard } from './components/HaircutAnalyticsCard';
 import { AIInsightsCard } from './components/AIInsightsCard';
 import { CalendarCard } from './components/CalendarCard';
-import { ClientHistoryCard } from './components/ClientHistoryCard';
+import { NextAppointmentCard } from './components/NextAppointmentCard';
 import { InventoryTrackingCard } from './components/InventoryTrackingCard';
 import { DataExportCard } from './components/DataExportCard';
 import { QuickActionsCard } from './components/QuickActionsCard';
@@ -152,7 +152,10 @@ export default function BarberDashboard() {
   const totalRevenue = completedAppointments.reduce((sum, apt) => sum + apt.price, 0);
   const totalCosts = completedAppointments.reduce((sum, apt) => sum + apt.cost, 0);
   const totalProfit = totalRevenue - totalCosts;
-  const avgProfitPerCut = completedAppointments.length > 0 ? Math.round(totalProfit / completedAppointments.length) : 0;
+
+  const avgProfitPerCut = completedAppointments.length > 0
+    ? Math.round(totalProfit / completedAppointments.length)
+    : 0;
 
   const today = new Date();
   const todayAppointments = appointments.filter((apt) => apt.date.toDateString() === today.toDateString()).length;
@@ -177,7 +180,9 @@ export default function BarberDashboard() {
       month: monthAppointments,
       year: yearAppointments,
     },
-    avgRevenuePerCut: completedAppointments.length > 0 ? Math.round(totalRevenue / completedAppointments.length) : 0,
+    avgRevenuePerCut: completedAppointments.length > 0
+      ? Math.round(totalRevenue / completedAppointments.length)
+      : 0,
     avgProfitPerCut,
     mostCommonCut: 'Burst Fade',
     slowestDay: 'Monday',
@@ -228,47 +233,55 @@ export default function BarberDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Barber Shop Dashboard
-          </h1>
-          <p className="text-gray-400">
-            Modern card-based business management with automation-ready features
-          </p>
+          <h1 className="text-4xl font-bold text-white mb-2">Barber Shop Dashboard</h1>
+          <p className="text-gray-400">Modern card-based business management with automation-ready features</p>
         </div>
 
+        {/* Row 1: Quick Stats */}
         <QuickStatsCard
           revenue={dashboardStats.revenue}
           spending={dashboardStats.spending}
           profit={dashboardStats.profit}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        {/* Row 2: Left (Next Appointment), Middle (Appointments Overview), Right (AI Insights) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <NextAppointmentCard
+            clientName={nextAppointment.clientName}
+            service={nextAppointment.haircutType}
+            time={nextAppointment.date.toISOString()} // pass time as string
+            duration={nextAppointment.duration}
+            phoneNumber={nextAppointment.phoneNumber}
+          />
+
           <AppointmentsOverviewCard
             stats={dashboardStats}
             nextAppointment={nextAppointment}
             onRunningLate={handleRunningLate}
           />
-          <HaircutAnalyticsCard
-            stats={dashboardStats}
-            appointments={appointments}
-          />
           <AIInsightsCard
             onSendSMS={handleSendSMS}
             onCreatePromotion={handleCreatePromotion}
           />
+        </div>
+
+        {/* Row 3: Left (Calendar), Middle (Haircut Stats), Right (Quick Actions) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           <CalendarCard appointments={appointments} />
-          <ClientHistoryCard
-            appointments={appointments}
-            onSendFollowUp={handleSendFollowUp}
-          />
-          <InventoryTrackingCard
-            inventory={inventory}
-            onReorderItem={handleReorderItem}
-            onUpdateThreshold={handleUpdateThreshold}
-            onToggleAutoReorder={handleToggleAutoReorder}
-          />
-          <DataExportCard onExportCSV={handleExportCSV} />
+          <HaircutAnalyticsCard stats={dashboardStats} appointments={appointments} />
           <QuickActionsCard onSendSMS={handleSendSMS} />
+        </div>
+
+        {/* Row 4: Full Width Schedule Visualization */}
+        <div className="bg-white rounded-xl p-6 shadow">
+          Weekly Schedule Visualization Placeholder
+        </div>
+
+        {/* Floating View Tab Button */}
+        <div className="fixed top-6 right-6 z-50">
+          <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded shadow">
+            View Tab
+          </button>
         </div>
       </div>
     </div>
