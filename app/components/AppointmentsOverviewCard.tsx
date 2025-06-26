@@ -49,15 +49,15 @@ export function AppointmentsOverviewCard({
       </div>
 
       {nextAppointment ? (
-        <div className="bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg p-4 border border-purple-400 shadow">
+        <div className="bg-white text-gray-800 rounded-lg p-4 border border-purple-200 shadow-sm">
           <div className="flex items-center space-x-2 mb-2">
-            <ClockIcon className="h-4 w-4 text-white" />
-            <h4 className="font-bold text-sm">NEXT APPOINTMENT</h4>
+            <ClockIcon className="h-4 w-4 text-purple-600" />
+            <h4 className="font-bold text-sm text-purple-800">NEXT APPOINTMENT</h4>
           </div>
           <div className="text-sm">
             <div className="font-bold">{nextAppointment.clientName}</div>
-            <div className="opacity-90">{nextAppointment.haircutType}</div>
-            <div className="opacity-90">
+            <div className="text-gray-600">{nextAppointment.haircutType}</div>
+            <div className="text-gray-600">
               {nextAppointment.date.toLocaleTimeString([], {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -66,7 +66,7 @@ export function AppointmentsOverviewCard({
           </div>
         </div>
       ) : (
-        <div className="rounded-lg p-4 bg-white/10 border border-white/20 text-center text-white/70">
+        <div className="rounded-lg p-4 bg-white text-center text-gray-500 border border-purple-200">
           No upcoming appointments
         </div>
       )}
@@ -94,22 +94,22 @@ export function AppointmentsOverviewCard({
       </div>
 
       {nextAppointment && (
-        <div className="bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg p-6 border border-purple-400 shadow">
+        <div className="bg-white text-gray-800 rounded-lg p-6 border border-purple-200 shadow-sm">
           <div className="flex items-center space-x-2 mb-4">
-            <ExclamationTriangleIcon className="h-5 w-5 text-white" />
-            <h4 className="font-bold text-lg">NEXT APPOINTMENT</h4>
+            <ExclamationTriangleIcon className="h-5 w-5 text-purple-600" />
+            <h4 className="font-bold text-lg text-purple-800">NEXT APPOINTMENT</h4>
           </div>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <span className="opacity-80">Client:</span>
+              <span className="text-gray-600">Client:</span>
               <p className="font-bold">{nextAppointment.clientName}</p>
             </div>
             <div>
-              <span className="opacity-80">Service:</span>
+              <span className="text-gray-600">Service:</span>
               <p className="font-bold">{nextAppointment.haircutType}</p>
             </div>
             <div>
-              <span className="opacity-80">Time:</span>
+              <span className="text-gray-600">Time:</span>
               <p className="font-bold">
                 {nextAppointment.date.toLocaleTimeString([], {
                   hour: '2-digit',
@@ -118,24 +118,24 @@ export function AppointmentsOverviewCard({
               </p>
             </div>
             <div>
-              <span className="opacity-80">Duration:</span>
+              <span className="text-gray-600">Duration:</span>
               <p className="font-bold">{nextAppointment.duration} min</p>
             </div>
             <div className="col-span-2">
-              <span className="opacity-80">Phone:</span>
+              <span className="text-gray-600">Phone:</span>
               <p className="font-bold">{nextAppointment.phoneNumber}</p>
             </div>
           </div>
           <div className="flex space-x-3">
             <Button
               onClick={onRunningLate}
-              className="flex-1 bg-white text-purple-600 hover:bg-purple-100"
+              className="flex-1 bg-purple-600 text-white hover:bg-purple-700"
             >
               🕐 Running 5 mins late
             </Button>
             <Button
               onClick={() => window.open(`tel:${nextAppointment.phoneNumber}`)}
-              className="px-4 bg-white text-green-600 hover:bg-green-100"
+              className="px-4 bg-green-600 text-white hover:bg-green-700"
             >
               <PhoneIcon className="h-4 w-4" />
             </Button>
@@ -147,22 +147,22 @@ export function AppointmentsOverviewCard({
         {(['today', 'week', 'month', 'year'] as const).map((period) => (
           <div
             key={period}
-            className="rounded-lg p-4 bg-white/10 border border-white/20 text-center text-white"
+            className="rounded-lg p-4 bg-white border border-purple-200 text-center shadow-sm"
           >
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-purple-800">
               {stats.totalBookings[period]}
             </div>
-            <div className="text-sm opacity-80">
+            <div className="text-sm text-purple-600">
               {period.charAt(0).toUpperCase() + period.slice(1)}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="bg-white/10 rounded-lg p-4 border border-white/20 text-white">
+      <div className="bg-white rounded-lg p-4 border border-purple-200 text-gray-800 shadow-sm">
         <h5 className="font-semibold mb-3">Full Appointment List</h5>
-        <div className="h-48 bg-white/5 rounded flex items-center justify-center">
-          <span className="text-white/70 text-sm">Detailed appointment list would go here</span>
+        <div className="h-48 bg-gray-50 rounded flex items-center justify-center">
+          <span className="text-gray-500 text-sm">Detailed appointment list would go here</span>
         </div>
       </div>
     </div>
@@ -173,7 +173,7 @@ export function AppointmentsOverviewCard({
       title="Appointments Overview"
       subtitle="Manage bookings and client communications"
       icon={<CalendarIcon className="h-6 w-6 text-purple-600" />}
-      variant="warning"
+      variant="default"
       collapsedContent={collapsedContent}
       defaultExpanded={false}
     >
