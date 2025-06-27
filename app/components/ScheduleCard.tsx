@@ -9,7 +9,7 @@ interface ScheduleCardProps {
 
 export function ScheduleCard({ appointments }: ScheduleCardProps) {
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 h-full">
+    <div className="bg-gray-900 rounded-xl shadow-2xl border border-gray-700 h-full min-h-[700px] overflow-hidden">
       <Schedule appointments={appointments} />
     </div>
   );
