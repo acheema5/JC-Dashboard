@@ -1,5 +1,5 @@
 'use client';
-
+import { DashboardStats, Appointment, InventoryItem } from '../types';
 import { useState } from 'react';
 import { 
   LightBulbIcon, 
@@ -14,6 +14,10 @@ import { AIInsight } from '../types';
 interface AIInsightsCardProps {
   onSendSMS: (message: string) => void;
   onCreatePromotion: (service: string) => void;
+  stats: DashboardStats;
+  appointments: Appointment[];
+  inventory: InventoryItem[];
+  onSendFollowUp: (appointment: Appointment) => void;
 }
 
 // Mock AI insights data
@@ -59,6 +63,10 @@ const mockAIInsights: AIInsight[] = [
 export function AIInsightsCard({
   onSendSMS,
   onCreatePromotion,
+  stats, 
+  appointments, 
+  inventory, 
+  onSendFollowUp 
 }: AIInsightsCardProps) {
   const [selectedInsight, setSelectedInsight] = useState<AIInsight | null>(null);
   const [insights] = useState<AIInsight[]>(mockAIInsights);

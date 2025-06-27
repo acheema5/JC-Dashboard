@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { QuickStatsCard } from './components/QuickStatsCard';
 import { AppointmentsOverviewCard } from './components/AppointmentsOverviewCard';
 import { HaircutAnalyticsCard } from './components/HaircutAnalyticsCard';
@@ -10,6 +10,8 @@ import { NextAppointmentCard } from './components/NextAppointmentCard';
 import { InventoryTrackingCard } from './components/InventoryTrackingCard';
 import { DataExportCard } from './components/DataExportCard';
 import { QuickActionsCard } from './components/QuickActionsCard';
+import { fetchTransformedData } from './dataTransformation';
+import { validateAppointmentData, logWebhookConnection } from './debugHelpers';
 import {
   Appointment,
   InventoryItem,
@@ -17,86 +19,7 @@ import {
   ExportOptions,
 } from './types';
 
-const mockAppointments: Appointment[] = [
-  {
-    id: '1',
-    clientName: 'John Smith',
-    phoneNumber: '(555) 123-4567',
-    haircutType: 'Burst Fade',
-    date: new Date(2025, 6, 20, 14, 30),
-    duration: 45,
-    price: 35,
-    cost: 8,
-    status: 'scheduled',
-  },
-  {
-    id: '2',
-    clientName: 'Mike Johnson',
-    phoneNumber: '(555) 987-6543',
-    haircutType: 'Buzz Cut',
-    date: new Date(2025, 6, 22, 10, 0),
-    duration: 25,
-    price: 25,
-    cost: 5,
-    status: 'completed',
-  },
-  {
-    id: '3',
-    clientName: 'David Wilson',
-    phoneNumber: '(555) 456-7890',
-    haircutType: 'Mullet',
-    date: new Date(2025, 7, 1, 16, 0),
-    duration: 40,
-    price: 45,
-    cost: 10,
-    status: 'scheduled',
-  },
-  {
-    id: '4',
-    clientName: 'Chris Brown',
-    phoneNumber: '(555) 321-0987',
-    haircutType: 'Undercut',
-    date: new Date(2025, 7, 5, 15, 30),
-    duration: 35,
-    price: 30,
-    cost: 7,
-    status: 'completed',
-  },
-  {
-    id: '5',
-    clientName: 'Alex Davis',
-    phoneNumber: '(555) 654-3210',
-    haircutType: 'Burst Fade',
-    date: new Date(2025, 7, 21, 11, 0),
-    duration: 45,
-    price: 35,
-    cost: 8,
-    status: 'scheduled',
-  },
-  {
-    id: '6',
-    clientName: 'Tom Wilson',
-    phoneNumber: '(555) 111-2222',
-    haircutType: 'Mullet',
-    date: new Date(2025, 8, 12, 9, 0),
-    duration: 40,
-    price: 45,
-    cost: 10,
-    status: 'completed',
-  },
-  {
-    id: '7',
-    clientName: 'Steve Miller',
-    phoneNumber: '(555) 333-4444',
-    haircutType: 'Burst Fade',
-    date: new Date(2025, 10, 11, 16, 30),
-    duration: 45,
-    price: 35,
-    cost: 8,
-    status: 'completed',
-  },
-];
-
+// Mock inventory data (unchanged)
 const mockInventory: InventoryItem[] = [
   {
     id: '1',
@@ -144,21 +67,116 @@ const mockInventory: InventoryItem[] = [
   },
 ];
 
-export default function BarberDashboard() {
-  const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
-  const [inventory, setInventory] = useState<InventoryItem[]>(mockInventory);
+// Fallback mock appointments (in case webhook fails)
+const fallbackAppointments: Appointment[] = [
+  {
+    id: '1',
+    clientName: 'John Smith',
+    phoneNumber: '(555) 123-4567',
+    haircutType: 'Burst Fade',
+    date: new Date(2025, 6, 20, 14, 30),
+    duration: 45,
+    price: 35,
+    cost: 8,
+    status: 'scheduled',
+  },
+  {
+    id: '2',
+    clientName: 'Mike Johnson',
+    phoneNumber: '(555) 987-6543',
+    haircutType: 'Buzz Cut',
+    date: new Date(2025, 6, 22, 10, 0),
+    duration: 25,
+    price: 25,
+    cost: 5,
+    status: 'completed',
+  },
+];
 
+export default function BarberDashboard() {
+  // State management
+  const [appointments, setAppointments] = useState<Appointment[]>(fallbackAppointments);
+  const [inventory, setInventory] = useState<InventoryItem[]>(mockInventory);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isConnectedToLiveData, setIsConnectedToLiveData] = useState(false);
+  const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(null);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+
+  // Fetch data from webhook
+  const fetchAppointments = async () => {
+    try {
+      setIsLoading(true);
+      setConnectionError(null);
+      
+      console.log('🔄 Fetching data from webhook...');
+      const result = await fetchTransformedData();
+      
+      if (result.success && result.data.length > 0) {
+        // Validate the data
+        const validation = validateAppointmentData(result.data);
+        
+        if (validation.issues.length > 0) {
+          console.warn('⚠️ Data validation issues:', validation.issues);
+        }
+        
+        console.log('✅ Data validation summary:', validation.summary);
+        
+        setAppointments(result.data);
+        setIsConnectedToLiveData(true);
+        setLastUpdateTime(new Date());
+        
+        logWebhookConnection(
+          process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL || 'Not configured',
+          true,
+          result.data
+        );
+        
+        console.log(`📊 Loaded ${result.data.length} appointments from webhook`);
+      } else {
+        throw new Error(result.error || 'No data received from webhook');
+      }
+    } catch (error) {
+      console.error('❌ Failed to fetch webhook data:', error);
+      setConnectionError(error instanceof Error ? error.message : 'Unknown error');
+      setIsConnectedToLiveData(false);
+      
+      logWebhookConnection(
+        process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL || 'Not configured',
+        false,
+        null,
+        error instanceof Error ? error.message : 'Unknown error'
+      );
+      
+      // Keep fallback data if webhook fails
+      console.log('📋 Using fallback mock data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Initial data fetch and auto-refresh
+  useEffect(() => {
+    fetchAppointments();
+    
+    // Set up auto-refresh every 5 minutes
+    const interval = setInterval(fetchAppointments, 5 * 60 * 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // Calculate dashboard statistics
   const completedAppointments = appointments.filter((apt) => apt.status === 'completed');
   const totalRevenue = completedAppointments.reduce((sum, apt) => sum + apt.price, 0);
   const totalCosts = completedAppointments.reduce((sum, apt) => sum + apt.cost, 0);
   const totalProfit = totalRevenue - totalCosts;
-
   const avgProfitPerCut = completedAppointments.length > 0
     ? Math.round(totalProfit / completedAppointments.length)
     : 0;
 
   const today = new Date();
-  const todayAppointments = appointments.filter((apt) => apt.date.toDateString() === today.toDateString()).length;
+  const todayAppointments = appointments.filter((apt) => 
+    apt.date.toDateString() === today.toDateString()
+  ).length;
 
   const weekStart = new Date(today);
   weekStart.setDate(today.getDate() - today.getDay());
@@ -169,6 +187,27 @@ export default function BarberDashboard() {
 
   const yearStart = new Date(today.getFullYear(), 0, 1);
   const yearAppointments = appointments.filter((apt) => apt.date >= yearStart).length;
+
+  // Calculate most common cut
+  const cutCounts = appointments.reduce((acc, apt) => {
+    acc[apt.haircutType] = (acc[apt.haircutType] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+  
+  const mostCommonCut = Object.entries(cutCounts)
+    .sort(([,a], [,b]) => b - a)[0]?.[0] || 'No data';
+
+  // Calculate day analysis
+  const dayCounts = appointments.reduce((acc, apt) => {
+    const day = apt.date.toLocaleDateString('en-US', { weekday: 'long' });
+    acc[day] = (acc[day] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+  
+  const slowestDay = Object.entries(dayCounts)
+    .sort(([,a], [,b]) => a - b)[0]?.[0] || 'Monday';
+  const busiestDay = Object.entries(dayCounts)
+    .sort(([,a], [,b]) => b - a)[0]?.[0] || 'Friday';
 
   const dashboardStats: DashboardStats = {
     revenue: totalRevenue,
@@ -184,22 +223,26 @@ export default function BarberDashboard() {
       ? Math.round(totalRevenue / completedAppointments.length)
       : 0,
     avgProfitPerCut,
-    mostCommonCut: 'Burst Fade',
-    slowestDay: 'Monday',
-    busiestDay: 'Friday',
+    mostCommonCut,
+    slowestDay,
+    busiestDay,
   };
 
+  // Find next appointment
   const nextAppointment = appointments
     .filter((apt) => apt.status === 'scheduled' && new Date(apt.date) > new Date())
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0];
 
+  // Event handlers
   const handleRunningLate = () => {
     if (nextAppointment) {
       alert(`SMS sent to ${nextAppointment.clientName} (${nextAppointment.phoneNumber}): "Hey! Running 5 minutes behind, see you soon."`);
     }
   };
 
-  const handleExportCSV = (options: ExportOptions) => {};
+  const handleExportCSV = (options: ExportOptions) => {
+    console.log('Exporting data with options:', options);
+  };
 
   const handleReorderItem = (itemId: string) => {
     const item = inventory.find((i) => i.id === itemId);
@@ -209,11 +252,19 @@ export default function BarberDashboard() {
   };
 
   const handleUpdateThreshold = (itemId: string, threshold: number) => {
-    setInventory((prev) => prev.map((item) => item.id === itemId ? { ...item, restockThreshold: threshold } : item));
+    setInventory((prev) =>
+      prev.map((item) =>
+        item.id === itemId ? { ...item, restockThreshold: threshold } : item
+      )
+    );
   };
 
   const handleToggleAutoReorder = (itemId: string) => {
-    setInventory((prev) => prev.map((item) => item.id === itemId ? { ...item, autoReorder: !item.autoReorder } : item));
+    setInventory((prev) =>
+      prev.map((item) =>
+        item.id === itemId ? { ...item, autoReorder: !item.autoReorder } : item
+      )
+    );
   };
 
   const handleSendSMS = (message: string) => {
@@ -230,59 +281,121 @@ export default function BarberDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Barber Shop Dashboard</h1>
-          <p className="text-gray-400">Modern card-based business management with automation-ready features</p>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-6">
+      {/* Header */}
+      <div className="max-w-7xl mx-auto mb-8">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Barber Shop Dashboard</h1>
+          <p className="text-gray-600 mb-4">Modern card-based business management with automation-ready features</p>
+          
+          {/* Connection Status */}
+          <div className="flex items-center justify-center space-x-4 text-sm">
+            <div className={`flex items-center space-x-2 px-3 py-1 rounded-full ${
+              isConnectedToLiveData 
+                ? 'bg-green-100 text-green-800' 
+                : 'bg-red-100 text-red-800'
+            }`}>
+              <div className={`w-2 h-2 rounded-full ${
+                isConnectedToLiveData ? 'bg-green-500' : 'bg-red-500'
+              }`} />
+              <span>
+                {isConnectedToLiveData ? 'Connected to Live Data' : 'Using Mock Data'}
+              </span>
+            </div>
+            
+            {lastUpdateTime && (
+              <div className="text-gray-500">
+                Last updated: {lastUpdateTime.toLocaleTimeString()}
+              </div>
+            )}
+            
+            {isLoading && (
+              <div className="text-blue-600">
+                🔄 Refreshing data...
+              </div>
+            )}
+          </div>
+          
+          {connectionError && (
+            <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
+              Connection Error: {connectionError}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Row 1: Quick Stats */}
+        <div className="lg:col-span-12">
+          <QuickStatsCard stats={dashboardStats} />
         </div>
 
-        {/* Row 1: Quick Stats */}
-        <QuickStatsCard
-          revenue={dashboardStats.revenue}
-          spending={dashboardStats.spending}
-          profit={dashboardStats.profit}
-        />
-
         {/* Row 2: Left (Next Appointment), Middle (Appointments Overview), Right (AI Insights) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="lg:col-span-3">
           <NextAppointmentCard
-            clientName={nextAppointment.clientName}
-            service={nextAppointment.haircutType}
-            time={nextAppointment.date.toISOString()} // pass time as string
-            duration={nextAppointment.duration}
-            phoneNumber={nextAppointment.phoneNumber}
+            clientName={nextAppointment?.clientName || 'No upcoming appointments'}
+            service={nextAppointment?.haircutType || ''}
+            time={nextAppointment?.date || new Date()}
+            duration={nextAppointment?.duration || 0}
+            phoneNumber={nextAppointment?.phoneNumber || ''}
           />
-
+        </div>
+        <div className="lg:col-span-6">
           <AppointmentsOverviewCard
             stats={dashboardStats}
-            nextAppointment={nextAppointment}
+            nextAppointment={nextAppointment || null}
             onRunningLate={handleRunningLate}
           />
+        </div>
+        <div className="lg:col-span-3">
           <AIInsightsCard
+            stats={dashboardStats}
+            appointments={appointments}
+            inventory={inventory}
+            onSendFollowUp={handleSendFollowUp}
+          />
+        </div>
+
+        {/* Row 3: Left (Calendar), Middle (Haircut Stats), Right (Quick Actions) */}
+        <div className="lg:col-span-4">
+          <CalendarCard appointments={appointments} />
+        </div>
+        <div className="lg:col-span-4">
+          <HaircutAnalyticsCard stats={dashboardStats} appointments={appointments} />
+        </div>
+        <div className="lg:col-span-4">
+          <QuickActionsCard
             onSendSMS={handleSendSMS}
             onCreatePromotion={handleCreatePromotion}
           />
         </div>
 
-        {/* Row 3: Left (Calendar), Middle (Haircut Stats), Right (Quick Actions) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          <CalendarCard appointments={appointments} />
-          <HaircutAnalyticsCard stats={dashboardStats} appointments={appointments} />
-          <QuickActionsCard onSendSMS={handleSendSMS} />
+        {/* Row 4: Full Width Inventory and Export */}
+        <div className="lg:col-span-8">
+          <InventoryTrackingCard
+            inventory={inventory}
+            onReorder={handleReorderItem}
+            onUpdateThreshold={handleUpdateThreshold}
+            onToggleAutoReorder={handleToggleAutoReorder}
+          />
+        </div>
+        <div className="lg:col-span-4">
+          <DataExportCard onExport={handleExportCSV} />
         </div>
 
-        {/* Row 4: Full Width Schedule Visualization */}
-        <div className="bg-white rounded-xl p-6 shadow">
-          Weekly Schedule Visualization Placeholder
+        {/* Row 5: Full Width Schedule Visualization */}
+        <div className="lg:col-span-12">
+          <div className="bg-white rounded-lg shadow-sm border p-6 text-center text-gray-500">
+            Weekly Schedule Visualization Placeholder
+          </div>
         </div>
+      </div>
 
-        {/* Floating View Tab Button */}
-        <div className="fixed top-6 right-6 z-50">
-          <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded shadow">
-            View Tab
-          </button>
-        </div>
+      {/* Floating View Tab Button */}
+      <div className="fixed bottom-6 right-6">
+        <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow-lg transition-colors">
+          View Tab
+        </button>
       </div>
     </div>
   );

@@ -7,48 +7,37 @@ import {
   ArrowTrendingDownIcon,
 } from '@heroicons/react/24/outline';
 import { ExpandableCard } from './ExpandableCard';
+import { DashboardStats } from '../types';
 
 interface QuickStatsCardProps {
-  revenue: number;
-  spending: number;
-  profit: number;
-  revenueChange?: number;
-  spendingChange?: number;
-  profitChange?: number;
+  stats: DashboardStats;
 }
 
-export function QuickStatsCard({
-  revenue,
-  spending,
-  profit,
-  revenueChange = 12,
-  spendingChange = -5,
-  profitChange = 18,
-}: QuickStatsCardProps) {
+export function QuickStatsCard({ stats }: QuickStatsCardProps) {
   const [selectedMetric, setSelectedMetric] = useState<
     'revenue' | 'spending' | 'profit'
   >('revenue');
 
   const metrics = {
     revenue: {
-      value: revenue,
-      change: revenueChange,
+      value: stats.revenue,
+      change: 20,
       textColor: 'text-green-400',
       bgColor: 'bg-gradient-to-br from-green-600 to-green-800',
       borderColor: 'border-green-700',
       icon: <CurrencyDollarIcon className="h-6 w-6 text-green-400" />,
     },
     spending: {
-      value: spending,
-      change: spendingChange,
+      value: stats.spending,
+      change: 10,
       textColor: 'text-red-400',
       bgColor: 'bg-gradient-to-br from-red-600 to-red-800',
       borderColor: 'border-red-700',
       icon: <ArrowTrendingDownIcon className="h-6 w-6 text-red-400" />,
     },
     profit: {
-      value: profit,
-      change: profitChange,
+      value: stats.profit,
+      change: 10,
       textColor: 'text-blue-400',
       bgColor: 'bg-gradient-to-br from-purple-600 via-blue-700 to-slate-800',
       borderColor: 'border-blue-700',
