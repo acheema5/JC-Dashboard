@@ -10,6 +10,7 @@ import { NextAppointmentCard } from './components/NextAppointmentCard';
 import { InventoryTrackingCard } from './components/InventoryTrackingCard';
 import { DataExportCard } from './components/DataExportCard';
 import { QuickActionsCard } from './components/QuickActionsCard';
+import { ScheduleCard } from './components/ScheduleCard';
 import {
   Appointment,
   InventoryItem,
@@ -274,7 +275,7 @@ export default function BarberDashboard() {
 
         {/* Row 4: Full Width Schedule Visualization */}
         <div className="bg-white rounded-xl p-6 shadow">
-          Weekly Schedule Visualization Placeholder
+          <ScheduleCard appointments={appointments} />
         </div>
 
         {/* Floating View Tab Button */}
