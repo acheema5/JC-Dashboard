@@ -33,7 +33,7 @@ export function QuickStatsCard({
     revenue: {
       value: revenue,
       change: revenueChange,
-      textColor: 'text-green-400',
+      textColor: 'text-white-400',
       bgColor: 'bg-gradient-to-br from-green-600 to-green-800',
       borderColor: 'border-green-700',
       icon: <CurrencyDollarIcon className="h-6 w-6 text-green-400" />,
@@ -41,7 +41,7 @@ export function QuickStatsCard({
     spending: {
       value: spending,
       change: spendingChange,
-      textColor: 'text-red-400',
+      textColor: 'text-white-400',
       bgColor: 'bg-gradient-to-br from-red-600 to-red-800',
       borderColor: 'border-red-700',
       icon: <ArrowTrendingDownIcon className="h-6 w-6 text-red-400" />,
@@ -49,7 +49,7 @@ export function QuickStatsCard({
     profit: {
       value: profit,
       change: profitChange,
-      textColor: 'text-blue-400',
+      textColor: 'text-white-400',
       bgColor: 'bg-gradient-to-br from-purple-600 via-blue-700 to-slate-800',
       borderColor: 'border-blue-700',
       icon: <ArrowTrendingUpIcon className="h-6 w-6 text-blue-400" />,
