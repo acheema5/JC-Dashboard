@@ -281,122 +281,167 @@ export default function BarberDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-6">
-      {/* Header */}
-      <div className="max-w-7xl mx-auto mb-8">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Barber Shop Dashboard</h1>
-          <p className="text-gray-600 mb-4">Modern card-based business management with automation-ready features</p>
-          
-          {/* Connection Status */}
-          <div className="flex items-center justify-center space-x-4 text-sm">
-            <div className={`flex items-center space-x-2 px-3 py-1 rounded-full ${
-              isConnectedToLiveData 
-                ? 'bg-green-100 text-green-800' 
-                : 'bg-red-100 text-red-800'
-            }`}>
-              <div className={`w-2 h-2 rounded-full ${
-                isConnectedToLiveData ? 'bg-green-500' : 'bg-red-500'
-              }`} />
-              <span>
-                {isConnectedToLiveData ? 'Connected to Live Data' : 'Using Mock Data'}
-              </span>
-            </div>
-            
-            {lastUpdateTime && (
-              <div className="text-gray-500">
-                Last updated: {lastUpdateTime.toLocaleTimeString()}
-              </div>
-            )}
-            
-            {isLoading && (
-              <div className="text-blue-600">
-                🔄 Refreshing data...
-              </div>
-            )}
-          </div>
-          
-          {connectionError && (
-            <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
-              Connection Error: {connectionError}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Row 1: Quick Stats */}
-        <div className="lg:col-span-12">
-          <QuickStatsCard stats={dashboardStats} />
-        </div>
-
-        {/* Row 2: Left (Next Appointment), Middle (Appointments Overview), Right (AI Insights) */}
-        <div className="lg:col-span-3">
-          <NextAppointmentCard
-            clientName={nextAppointment?.clientName || 'No upcoming appointments'}
-            service={nextAppointment?.haircutType || ''}
-            time={nextAppointment?.date || new Date()}
-            duration={nextAppointment?.duration || 0}
-            phoneNumber={nextAppointment?.phoneNumber || ''}
-          />
-        </div>
-        <div className="lg:col-span-6">
-          <AppointmentsOverviewCard
-            stats={dashboardStats}
-            nextAppointment={nextAppointment || null}
-            onRunningLate={handleRunningLate}
-          />
-        </div>
-        <div className="lg:col-span-3">
-          <AIInsightsCard
-            stats={dashboardStats}
-            appointments={appointments}
-            inventory={inventory}
-            onSendFollowUp={handleSendFollowUp}
-          />
-        </div>
-
-        {/* Row 3: Left (Calendar), Middle (Haircut Stats), Right (Quick Actions) */}
-        <div className="lg:col-span-4">
-          <CalendarCard appointments={appointments} />
-        </div>
-        <div className="lg:col-span-4">
-          <HaircutAnalyticsCard stats={dashboardStats} appointments={appointments} />
-        </div>
-        <div className="lg:col-span-4">
-          <QuickActionsCard
-            onSendSMS={handleSendSMS}
-            onCreatePromotion={handleCreatePromotion}
-          />
-        </div>
-
-        {/* Row 4: Full Width Inventory and Export */}
-        <div className="lg:col-span-8">
-          <InventoryTrackingCard
-            inventory={inventory}
-            onReorder={handleReorderItem}
-            onUpdateThreshold={handleUpdateThreshold}
-            onToggleAutoReorder={handleToggleAutoReorder}
-          />
-        </div>
-        <div className="lg:col-span-4">
-          <DataExportCard onExport={handleExportCSV} />
-        </div>
-
-        {/* Row 5: Full Width Schedule Visualization */}
-        <div className="lg:col-span-12">
-          <div className="bg-white rounded-lg shadow-sm border p-6 text-center text-gray-500">
-            Weekly Schedule Visualization Placeholder
-          </div>
-        </div>
-      </div>
-
-      {/* Floating View Tab Button */}
-      <div className="fixed bottom-6 right-6">
-        <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow-lg transition-colors">
-          View Tab
-        </button>
-      </div>
+   <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-6">
+    {/* Google Sheets Link */}
+    <div className="w-full mb-4">
+     <a
+      href="https://docs.google.com/spreadsheets/d/1BkhpwheJbR90wpwU5NpR7URHjrVKyAqNOe3iyF_M4f0/edit"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center space-x-2 text-sm font-medium text-blue-700 hover:underline"
+     >
+      <svg
+       xmlns="http://www.w3.org/2000/svg"
+       fill="currentColor"
+       viewBox="0 0 24 24"
+       className="w-4 h-4"
+      >
+       <path d="M19.615 3.184A1.5 1.5 0 0018.382 2H6.75A1.75 1.75 0 005 3.75v16.5A1.75 1.75 0 006.75 22h10.5A1.75 1.75 0 0019 20.25V4.118a1.5 1.5 0 00-.385-0.934zM8 5h7v2H8V5zm0 4h5v2H8V9zm0 4h7v2H8v-2zm0 4h5v2H8v-2z" />
+      </svg>
+      <span>Open Appointment Sheet</span>
+     </a>
     </div>
+
+    {/* Header */}
+    <div className="max-w-7xl mx-auto mb-8">
+     <div className="text-center">
+      <h1 className="text-4xl font-bold text-gray-900 mb-2">
+       JC BarbieCuts Dashboard
+      </h1>
+
+      {/* Connection Status */}
+      <div className="flex items-center justify-center space-x-4 text-sm">
+       <div
+        className={`flex items-center space-x-2 px-3 py-1 rounded-full ${
+         isConnectedToLiveData
+          ? "bg-green-100 text-green-800"
+          : "bg-red-100 text-red-800"
+        }`}
+       >
+        <div
+         className={`w-2 h-2 rounded-full ${
+          isConnectedToLiveData ? "bg-green-500" : "bg-red-500"
+         }`}
+        />
+        <span>
+         {isConnectedToLiveData ? "Connected to Live Data" : "Using Mock Data"}
+        </span>
+       </div>
+
+       {lastUpdateTime && (
+        <div className="text-gray-500">
+         Last updated: {lastUpdateTime.toLocaleTimeString()}
+        </div>
+       )}
+
+       {isLoading && <div className="text-blue-600">🔄 Refreshing data...</div>}
+      </div>
+
+      {connectionError && (
+       <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
+        Connection Error: {connectionError}
+       </div>
+      )}
+     </div>
+    </div>
+
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+     {/* Row 1: Quick Stats */}
+     <div className="lg:col-span-12 lg:col-start-1">
+      <div className="flex flex-col lg:flex-row gap-4">
+       <div className="flex-1">
+        <QuickStatsCard
+         stats={dashboardStats}
+         appointments={appointments}
+         type={"revenue"}
+        />
+       </div>
+       <div className="flex-1">
+        <QuickStatsCard
+         stats={dashboardStats}
+         appointments={appointments}
+         type={"spending"}
+        />
+       </div>
+       <div className="flex-1">
+        <QuickStatsCard
+         stats={dashboardStats}
+         appointments={appointments}
+         type={"profit"}
+        />
+       </div>
+      </div>
+     </div>
+
+     {/* Row 2: Left (Next Appointment), Middle (Appointments Overview), Right (AI Insights) */}
+     <div className="lg:col-span-3">
+      <NextAppointmentCard
+       clientName={nextAppointment?.clientName || "No upcoming appointments"}
+       service={nextAppointment?.haircutType || ""}
+       time={nextAppointment?.date || new Date()}
+       duration={nextAppointment?.duration || 0}
+       phoneNumber={nextAppointment?.phoneNumber || ""}
+      />
+     </div>
+     <div className="lg:col-span-6">
+      <AppointmentsOverviewCard
+       stats={dashboardStats}
+       appointments={appointments}
+       nextAppointment={nextAppointment || null}
+       onRunningLate={handleRunningLate}
+      />
+     </div>
+     <div className="lg:col-span-3">
+      <AIInsightsCard
+       stats={dashboardStats}
+       appointments={appointments}
+       inventory={inventory}
+       onSendFollowUp={handleSendFollowUp}
+       onSendSMS={handleSendSMS}
+       onCreatePromotion={handleCreatePromotion}
+      />
+     </div>
+
+     {/* Row 3: Left (Calendar), Middle (Haircut Stats), Right (Quick Actions) */}
+     <div className="lg:col-span-4">
+      <CalendarCard appointments={appointments} />
+     </div>
+     <div className="lg:col-span-4">
+      <HaircutAnalyticsCard
+       stats={dashboardStats}
+       appointments={appointments}
+      />
+     </div>
+     <div className="lg:col-span-4">
+      <QuickActionsCard
+       onSendSMS={handleSendSMS}
+       onCreatePromotion={handleCreatePromotion}
+      />
+     </div>
+
+     {/* Row 4: Full Width Inventory and Export */}
+     <div className="lg:col-span-8">
+      <InventoryTrackingCard
+       inventory={inventory}
+       onReorder={handleReorderItem}
+       onUpdateThreshold={handleUpdateThreshold}
+       onToggleAutoReorder={handleToggleAutoReorder}
+      />
+     </div>
+     <div className="lg:col-span-4">
+      <DataExportCard
+       onExport={handleExportCSV}
+       onExportCSV={handleExportCSV}
+      />
+     </div>
+    </div>
+
+    {/* Floating View Tab Button */}
+    <div className="fixed bottom-6 right-6">
+     <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow-lg transition-colors">
+      View Tab
+     </button>
+    </div>
+   </div>
   );
 }

@@ -1,155 +1,189 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
 import {
-  CurrencyDollarIcon,
-  ArrowTrendingUpIcon,
-  ArrowTrendingDownIcon,
-} from '@heroicons/react/24/outline';
-import { ExpandableCard } from './ExpandableCard';
-import { DashboardStats } from '../types';
+ CurrencyDollarIcon,
+ BanknotesIcon,
+ ChartBarIcon,
+ ArrowTrendingUpIcon,
+ ArrowTrendingDownIcon,
+} from "@heroicons/react/24/outline";
+import { Appointment, DashboardStats } from "../types";
 
 interface QuickStatsCardProps {
-  stats: DashboardStats;
+ stats: DashboardStats;
+ appointments: Appointment[];
+ type: "revenue" | "spending" | "profit" | "bookings";
 }
 
-export function QuickStatsCard({ stats }: QuickStatsCardProps) {
-  const [selectedMetric, setSelectedMetric] = useState<
-    'revenue' | 'spending' | 'profit'
-  >('revenue');
+export function QuickStatsCard({
+ stats,
+ appointments,
+ type,
+}: QuickStatsCardProps) {
+ // Calculate current period data (last 30 days)
+ const getCurrentPeriodData = () => {
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  const metrics = {
-    revenue: {
-      value: stats.revenue,
-      change: 20,
-      textColor: 'text-green-400',
-      bgColor: 'bg-gradient-to-br from-green-600 to-green-800',
-      borderColor: 'border-green-700',
-      icon: <CurrencyDollarIcon className="h-6 w-6 text-green-400" />,
-    },
-    spending: {
-      value: stats.spending,
-      change: 10,
-      textColor: 'text-red-400',
-      bgColor: 'bg-gradient-to-br from-red-600 to-red-800',
-      borderColor: 'border-red-700',
-      icon: <ArrowTrendingDownIcon className="h-6 w-6 text-red-400" />,
-    },
-    profit: {
-      value: stats.profit,
-      change: 10,
-      textColor: 'text-blue-400',
-      bgColor: 'bg-gradient-to-br from-purple-600 via-blue-700 to-slate-800',
-      borderColor: 'border-blue-700',
-      icon: <ArrowTrendingUpIcon className="h-6 w-6 text-blue-400" />,
-    },
+  const currentPeriodAppointments = appointments.filter(
+   (apt) => apt.status === "completed" && new Date(apt.date) >= thirtyDaysAgo
+  );
+
+  const revenue = currentPeriodAppointments.reduce(
+   (sum, apt) => sum + apt.price,
+   0
+  );
+  const costs = currentPeriodAppointments.reduce(
+   (sum, apt) => sum + apt.cost,
+   0
+  );
+  const profit = revenue - costs;
+
+  return {
+   revenue,
+   spending: costs,
+   profit,
+   bookings: currentPeriodAppointments.length,
   };
+ };
 
-  const selectedMetricData = metrics[selectedMetric];
+ // Calculate previous period data (30 days before that)
+ const getPreviousPeriodData = () => {
+  const sixtyDaysAgo = new Date();
+  sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  const collapsedContent = (
-    <div className="grid grid-cols-3 gap-4">
-      {Object.entries(metrics).map(([key, data]) => (
-        <div
-          key={key}
-          className={`cursor-pointer transition-all hover:scale-105 p-3 rounded-lg border ${data.bgColor} ${data.borderColor}`}
-          onClick={() => setSelectedMetric(key as keyof typeof metrics)}
-        >
-          <div className={`text-sm font-medium ${data.textColor} uppercase tracking-wide`}>
-            {key}
-          </div>
-          <div className={`text-2xl font-bold ${data.textColor} mt-1`}>
-            ${data.value.toLocaleString()}
-          </div>
-          <div className={`text-xs ${data.textColor} mt-1`}>
-            {data.change > 0 ? '+' : ''}
-            {data.change}% from last week
-          </div>
-        </div>
-      ))}
+  const previousPeriodAppointments = appointments.filter(
+   (apt) =>
+    apt.status === "completed" &&
+    new Date(apt.date) >= sixtyDaysAgo &&
+    new Date(apt.date) < thirtyDaysAgo
+  );
+
+  const revenue = previousPeriodAppointments.reduce(
+   (sum, apt) => sum + apt.price,
+   0
+  );
+  const costs = previousPeriodAppointments.reduce(
+   (sum, apt) => sum + apt.cost,
+   0
+  );
+  const profit = revenue - costs;
+
+  return {
+   revenue,
+   spending: costs,
+   profit,
+   bookings: previousPeriodAppointments.length,
+  };
+ };
+
+ const currentData = getCurrentPeriodData();
+ const previousData = getPreviousPeriodData();
+
+ // Calculate percentage change
+ const calculateChange = (current: number, previous: number) => {
+  if (previous === 0) return current > 0 ? 100 : 0;
+  return Math.round(((current - previous) / previous) * 100);
+ };
+
+ // Get card configuration based on type
+ const getCardConfig = () => {
+  switch (type) {
+   case "revenue":
+    return {
+     title: "Revenue",
+     value: currentData.revenue,
+     previousValue: previousData.revenue,
+     icon: <CurrencyDollarIcon className="w-6 h-6" />,
+     bgColor: "bg-gradient-to-r from-green-500 to-green-600",
+     format: (val: number) => `$${val.toLocaleString()}`,
+    };
+   case "spending":
+    return {
+     title: "Spending",
+     value: currentData.spending,
+     previousValue: previousData.spending,
+     icon: <BanknotesIcon className="w-6 h-6" />,
+     bgColor: "bg-gradient-to-r from-red-500 to-red-600",
+     format: (val: number) => `$${val.toLocaleString()}`,
+    };
+   case "profit":
+    return {
+     title: "Profit",
+     value: currentData.profit,
+     previousValue: previousData.profit,
+     icon: <ChartBarIcon className="w-6 h-6" />,
+     bgColor: "bg-gradient-to-r from-blue-500 to-blue-600",
+     format: (val: number) => `$${val.toLocaleString()}`,
+    };
+   case "bookings":
+    return {
+     title: "Total Bookings",
+     value: currentData.bookings,
+     previousValue: previousData.bookings,
+     icon: <ChartBarIcon className="w-6 h-6" />,
+     bgColor: "bg-gradient-to-r from-purple-500 to-purple-600",
+     format: (val: number) => val.toString(),
+    };
+   default:
+    return {
+     title: "Revenue",
+     value: currentData.revenue,
+     previousValue: previousData.revenue,
+     icon: <CurrencyDollarIcon className="w-6 h-6" />,
+     bgColor: "bg-gradient-to-r from-green-500 to-green-600",
+     format: (val: number) => `$${val.toLocaleString()}`,
+    };
+  }
+ };
+
+ const config = getCardConfig();
+ const change = calculateChange(config.value, config.previousValue);
+ const isPositive = change > 0;
+ const isNegative = change < 0;
+
+ return (
+  <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+   <div className={`${config.bgColor} p-4`}>
+    <div className="flex items-center justify-between text-white">
+     <div className="flex items-center space-x-3">
+      {config.icon}
+      <h3 className="text-lg font-semibold">{config.title}</h3>
+     </div>
+     <div className="text-right">
+      <div className="text-2xl font-bold">{config.format(config.value)}</div>
+      <div className="text-sm opacity-90">Last 30 days</div>
+     </div>
     </div>
-  );
+   </div>
 
-  const expandedContent = (
-    <div className="space-y-6">
-      {/* Metric Selector */}
-      <div className="flex space-x-2">
-        {Object.entries(metrics).map(([key, data]) => (
-          <button
-            key={key}
-            onClick={() => setSelectedMetric(key as keyof typeof metrics)}
-            className={`px-4 py-2 rounded-lg font-medium transition-all ${
-              selectedMetric === key
-                ? `${data.bgColor} ${data.textColor} border ${data.borderColor}`
-                : 'bg-slate-800 text-gray-400 hover:bg-slate-700 border border-slate-700'
-            }`}
-          >
-            {key.charAt(0).toUpperCase() + key.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      {/* Detailed View */}
-      <div
-        className={`p-6 rounded-lg border ${selectedMetricData.bgColor} ${selectedMetricData.borderColor}`}
-      >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            {selectedMetricData.icon}
-            <h4 className={`text-xl font-bold ${selectedMetricData.textColor}`}>
-              {selectedMetric.charAt(0).toUpperCase() + selectedMetric.slice(1)} Details
-            </h4>
-          </div>
-          <div className={`text-2xl font-bold ${selectedMetricData.textColor}`}>
-            ${selectedMetricData.value.toLocaleString()}
-          </div>
-        </div>
-
-        {/* Trend Chart Placeholder */}
-        <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-400">Weekly Trend</span>
-            <span className={`text-sm font-medium ${selectedMetricData.textColor}`}>
-              {selectedMetricData.change > 0 ? '+' : ''}
-              {selectedMetricData.change}%
-            </span>
-          </div>
-          <div className="h-32 bg-slate-700 rounded flex items-center justify-center">
-            <span className="text-gray-500 text-sm">
-              Chart visualization would go here
-            </span>
-          </div>
-        </div>
-
-        {/* Additional Metrics */}
-        <div className="grid grid-cols-2 gap-4 mt-4">
-          <div className="bg-slate-800 rounded-lg p-3 border border-slate-700">
-            <div className="text-sm text-gray-400">Daily Average</div>
-            <div className={`text-lg font-bold ${selectedMetricData.textColor}`}>
-              ${Math.round(selectedMetricData.value / 7).toLocaleString()}
-            </div>
-          </div>
-          <div className="bg-slate-800 rounded-lg p-3 border border-slate-700">
-            <div className="text-sm text-gray-400">Monthly Projection</div>
-            <div className={`text-lg font-bold ${selectedMetricData.textColor}`}>
-              ${Math.round(selectedMetricData.value * 4.33).toLocaleString()}
-            </div>
-          </div>
-        </div>
-      </div>
+   <div className="p-4">
+    <div className="flex items-center justify-between">
+     <div className="text-sm text-gray-600">vs previous 30 days</div>
+     <div
+      className={`flex items-center space-x-1 text-sm font-medium ${
+       isPositive
+        ? "text-green-600"
+        : isNegative
+        ? "text-red-600"
+        : "text-gray-600"
+      }`}
+     >
+      {isPositive && <ArrowTrendingUpIcon className="w-4 h-4" />}
+      {isNegative && <ArrowTrendingDownIcon className="w-4 h-4" />}
+      <span>
+       {change > 0 ? "+" : ""}
+       {change}%
+      </span>
+     </div>
     </div>
-  );
 
-  return (
-    <ExpandableCard
-      title="Quick Stats"
-      subtitle="Revenue, spending, and profit overview"
-      icon={<CurrencyDollarIcon className="h-6 w-6 text-green-400" />}
-      variant="success"
-      collapsedContent={collapsedContent}
-      defaultExpanded={false}
-    >
-      {expandedContent}
-    </ExpandableCard>
-  );
+    <div className="mt-2 text-xs text-gray-500">
+     Previous: {config.format(config.previousValue)}
+    </div>
+   </div>
+  </div>
+ );
 }
