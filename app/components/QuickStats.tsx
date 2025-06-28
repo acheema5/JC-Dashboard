@@ -16,7 +16,7 @@ export function QuickStats({ revenue, spending, profit }: QuickStatsProps) {
         <div className="text-center">
           <h3 className="text-sm font-medium uppercase tracking-wide">Revenue</h3>
           <p className="text-3xl font-bold mt-2">${revenue.toLocaleString()}</p>
-          <p className="text-sm text-green-100 mt-1">+12% from last week</p>
+          <p className="text-sm text-white-100 mt-1">+12% from last week</p>
         </div>
       </Card>
 

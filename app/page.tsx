@@ -12,6 +12,7 @@ import { DataExportCard } from './components/DataExportCard';
 import { QuickActionsCard } from './components/QuickActionsCard';
 import { fetchTransformedData } from './dataTransformation';
 import { validateAppointmentData, logWebhookConnection } from './debugHelpers';
+import { ScheduleCard } from './components/ScheduleCard';
 import {
   Appointment,
   InventoryItem,
@@ -336,7 +337,6 @@ export default function BarberDashboard() {
 
        {isLoading && <div className="text-blue-600">🔄 Refreshing data...</div>}
       </div>
-
       {connectionError && (
        <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
         Connection Error: {connectionError}
@@ -344,6 +344,10 @@ export default function BarberDashboard() {
       )}
      </div>
     </div>
+        {/* Row 4: Full Width Schedule Visualization */}
+        <div className="bg-white rounded-xl p-6 shadow">
+          <ScheduleCard appointments={appointments} />
+        </div>
 
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
      {/* Row 1: Quick Stats */}

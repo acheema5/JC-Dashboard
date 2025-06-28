@@ -24,6 +24,36 @@ export function QuickStatsCard({
  const getCurrentPeriodData = () => {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const [selectedMetric, setSelectedMetric] = useState<
+    'revenue' | 'spending' | 'profit'
+  >('revenue');
+
+  const metrics = {
+    revenue: {
+      value: revenue,
+      change: revenueChange,
+      textColor: 'text-white-400',
+      bgColor: 'bg-gradient-to-br from-green-600 to-green-800',
+      borderColor: 'border-green-700',
+      icon: <CurrencyDollarIcon className="h-6 w-6 text-green-400" />,
+    },
+    spending: {
+      value: spending,
+      change: spendingChange,
+      textColor: 'text-white-400',
+      bgColor: 'bg-gradient-to-br from-red-600 to-red-800',
+      borderColor: 'border-red-700',
+      icon: <ArrowTrendingDownIcon className="h-6 w-6 text-red-400" />,
+    },
+    profit: {
+      value: profit,
+      change: profitChange,
+      textColor: 'text-white-400',
+      bgColor: 'bg-gradient-to-br from-purple-600 via-blue-700 to-slate-800',
+      borderColor: 'border-blue-700',
+      icon: <ArrowTrendingUpIcon className="h-6 w-6 text-blue-400" />,
+    },
+  };
 
   const currentPeriodAppointments = appointments.filter(
    (apt) => apt.status === "completed" && new Date(apt.date) >= thirtyDaysAgo
