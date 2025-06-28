@@ -13,9 +13,10 @@ import { ExportOptions } from '../types';
 
 interface DataExportCardProps {
   onExportCSV: (options: ExportOptions) => void;
+  onExport: (options: ExportOptions) => void;
 }
 
-export function DataExportCard({ onExportCSV }: DataExportCardProps) {
+export function DataExportCard({ onExportCSV, onExport }: DataExportCardProps) {
   const [exportType, setExportType] = useState<'appointments' | 'inventory'>('appointments');
   const [dateRange, setDateRange] = useState<'all' | 'week' | 'month' | 'year'>('all');
   const [clientFilter, setClientFilter] = useState('');
