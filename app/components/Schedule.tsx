@@ -86,11 +86,11 @@ export function Schedule({ appointments }: ScheduleProps) {
  };
 
  return (
-  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+  <div className="bg-gradient-to-br from-purple-700 to-blue-800 rounded-lg shadow-lg border border-blue-700 p-6 text-white">
    {/* Header */}
    <div className="flex items-center justify-between mb-6">
-    <h3 className="text-lg font-semibold text-gray-900">Weekly Schedule</h3>
-    <div className="text-sm text-gray-500">
+    <h3 className="text-lg font-semibold text-white-900">Weekly Schedule</h3>
+    <div className="text-sm font-semibold text-white-500">
      {weekDates[0].toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",
@@ -107,7 +107,7 @@ export function Schedule({ appointments }: ScheduleProps) {
    {/* Calendar Grid */}
    <div className="grid grid-cols-8 gap-px bg-gray-200 rounded-lg overflow-hidden">
     {/* Time Column */}
-    <div className="bg-gray-50">
+    <div className="bg-blue-50">
      <div className="h-12 border-b border-gray-200"></div>
      {timeSlots.map((slot, index) => (
       <div
