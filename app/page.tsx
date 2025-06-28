@@ -282,14 +282,14 @@ export default function BarberDashboard() {
   };
 
   return (
-   <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-6">
+   <div className="min-h-screen bg-gradient-to-br from-blue-800 via-blue-900 to-purple-900 p-6 text-white">
     {/* Google Sheets Link */}
     <div className="w-full mb-4">
      <a
       href="https://docs.google.com/spreadsheets/d/1BkhpwheJbR90wpwU5NpR7URHjrVKyAqNOe3iyF_M4f0/edit"
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center space-x-2 text-sm font-medium text-blue-700 hover:underline"
+      className="inline-flex items-center space-x-2 text-sm font-medium text-white-700 hover:underline"
      >
       <svg
        xmlns="http://www.w3.org/2000/svg"
@@ -306,7 +306,7 @@ export default function BarberDashboard() {
     {/* Header */}
     <div className="max-w-7xl mx-auto mb-8">
      <div className="text-center">
-      <h1 className="text-4xl font-bold text-gray-900 mb-2">
+      <h1 className="text-4xl font-bold text-white-900 mb-2">
        JC BarbieCuts Dashboard
       </h1>
 

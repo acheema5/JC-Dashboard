@@ -137,7 +137,7 @@ export function Schedule({ appointments }: ScheduleProps) {
         )}
        >
         <div>{weekdays[dayIndex]}</div>
-        <div className="text-gray-500">
+        <div className="text-black-500">
          {date.getMonth() + 1}/{date.getDate()}
         </div>
        </div>
