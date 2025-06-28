@@ -306,7 +306,10 @@ export default function BarberDashboard() {
     {/* Header */}
     <div className="max-w-7xl mx-auto mb-8">
      <div className="text-center">
-      <h1 className="text-4xl font-bold text-white-900 mb-2">
+      <h1 className="text-4xl font-bold text-white-900 mb-2 
+                    transition-transform transition-colors duration-300 ease-in-out
+                    hover:text-purple-500 hover:scale-105
+                    ">
        JC BarbieCuts Dashboard
       </h1>
 
@@ -345,26 +348,20 @@ export default function BarberDashboard() {
      </div>
     </div>
 
-<div className="w-full mx-auto grid grid-cols-1 gap-6">
+<div className="w-full mx-auto grid grid-cols-1 gap-8">
 
   {/* Row 1: Quick Stats */}
-  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <QuickStatsCard
-      stats={dashboardStats}
-      appointments={appointments}
-      type={"revenue"}
-    />
-    <QuickStatsCard
-      stats={dashboardStats}
-      appointments={appointments}
-      type={"spending"}
-    />
-    <QuickStatsCard
-      stats={dashboardStats}
-      appointments={appointments}
-      type={"profit"}
-    />
-  </div>
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <div className="transition-transform duration-300 ease-in-out transform hover:scale-105">
+      <QuickStatsCard stats={dashboardStats} appointments={appointments} type={"revenue"} />
+    </div>
+    <div className="transition-transform duration-300 ease-in-out transform hover:scale-105">
+      <QuickStatsCard stats={dashboardStats} appointments={appointments} type={"spending"} />
+    </div>
+    <div className="transition-transform duration-300 ease-in-out transform hover:scale-105">
+      <QuickStatsCard stats={dashboardStats} appointments={appointments} type={"profit"} />
+    </div>
+    </div>
 
   {/* Row 2: Next Appointment | Appointments Overview | AI Insights */}
   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
