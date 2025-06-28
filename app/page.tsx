@@ -345,100 +345,70 @@ export default function BarberDashboard() {
      </div>
     </div>
 
-    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-     {/* Row 1: Quick Stats */}
-     <div className="lg:col-span-12 lg:col-start-1">
-      <div className="flex flex-col lg:flex-row gap-4">
-       <div className="flex-1">
-        <QuickStatsCard
-         stats={dashboardStats}
-         appointments={appointments}
-         type={"revenue"}
-        />
-       </div>
-       <div className="flex-1">
-        <QuickStatsCard
-         stats={dashboardStats}
-         appointments={appointments}
-         type={"spending"}
-        />
-       </div>
-       <div className="flex-1">
-        <QuickStatsCard
-         stats={dashboardStats}
-         appointments={appointments}
-         type={"profit"}
-        />
-       </div>
-      </div>
-     </div>
+<div className="w-full mx-auto grid grid-cols-1 gap-6">
 
-     {/* Row 2: Left (Next Appointment), Middle (Appointments Overview), Right (AI Insights) */}
-     <div className="lg:col-span-3">
-      <NextAppointmentCard
-       clientName={nextAppointment?.clientName || "No upcoming appointments"}
-       service={nextAppointment?.haircutType || ""}
-       time={nextAppointment?.date || new Date()}
-       duration={nextAppointment?.duration || 0}
-       phoneNumber={nextAppointment?.phoneNumber || ""}
-      />
-     </div>
-     <div className="lg:col-span-6">
-      <AppointmentsOverviewCard
-       stats={dashboardStats}
-       appointments={appointments}
-       nextAppointment={nextAppointment || null}
-       onRunningLate={handleRunningLate}
-      />
-     </div>
-     <div className="lg:col-span-3">
-      <AIInsightsCard
-       stats={dashboardStats}
-       appointments={appointments}
-       inventory={inventory}
-       onSendFollowUp={handleSendFollowUp}
-       onSendSMS={handleSendSMS}
-       onCreatePromotion={handleCreatePromotion}
-      />
-     </div>
+  {/* Row 1: Quick Stats */}
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <QuickStatsCard
+      stats={dashboardStats}
+      appointments={appointments}
+      type={"revenue"}
+    />
+    <QuickStatsCard
+      stats={dashboardStats}
+      appointments={appointments}
+      type={"spending"}
+    />
+    <QuickStatsCard
+      stats={dashboardStats}
+      appointments={appointments}
+      type={"profit"}
+    />
+  </div>
 
-     {/* Row 3: Left (Calendar), Middle (Haircut Stats), Right (Quick Actions) */}
-     <div className="lg:col-span-4">
-      <CalendarCard appointments={appointments} />
-     </div>
-     <div className="lg:col-span-4">
-      <HaircutAnalyticsCard
-       stats={dashboardStats}
-       appointments={appointments}
-      />
-     </div>
-     <div className="lg:col-span-4">
-      <QuickActionsCard
-       onSendSMS={handleSendSMS}
-       onCreatePromotion={handleCreatePromotion}
-      />
-     </div>
+  {/* Row 2: Next Appointment | Appointments Overview | AI Insights */}
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <NextAppointmentCard
+      clientName={nextAppointment?.clientName || "No upcoming appointments"}
+      service={nextAppointment?.haircutType || ""}
+      time={nextAppointment?.date || new Date()}
+      duration={nextAppointment?.duration || 0}
+      phoneNumber={nextAppointment?.phoneNumber || ""}
+    />
+    <AppointmentsOverviewCard
+      stats={dashboardStats}
+      appointments={appointments}
+      nextAppointment={nextAppointment || null}
+      onRunningLate={handleRunningLate}
+    />
+    <AIInsightsCard
+      stats={dashboardStats}
+      appointments={appointments}
+      inventory={inventory}
+      onSendFollowUp={handleSendFollowUp}
+      onSendSMS={handleSendSMS}
+      onCreatePromotion={handleCreatePromotion}
+    />
+  </div>
 
-     {/* Row 4: Full Width Inventory and Export */}
-     <div className="lg:col-span-8">
-      <InventoryTrackingCard
-       inventory={inventory}
-       onReorder={handleReorderItem}
-       onUpdateThreshold={handleUpdateThreshold}
-       onToggleAutoReorder={handleToggleAutoReorder}
-      />
-     </div>
-     <div className="lg:col-span-4">
-      <DataExportCard
-       onExport={handleExportCSV}
-       onExportCSV={handleExportCSV}
-      />
-     </div>
-    </div>
-    {/* Row 4: Full Width Schedule Visualization */}
-    <div className="bg-white rounded-xl p-6 shadow">
-     <ScheduleCard appointments={appointments} />
-    </div>
+  {/* Row 3: Calendar | Haircut Analytics | Quick Actions */}
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <CalendarCard appointments={appointments} />
+    <HaircutAnalyticsCard
+      stats={dashboardStats}
+      appointments={appointments}
+    />
+    <QuickActionsCard
+      onSendSMS={handleSendSMS}
+      onCreatePromotion={handleCreatePromotion}
+    />
+  </div>
+</div>
+
+{/* Row 4: Full Width Weekly Schedule */}
+<div className="mt-6 bg-white rounded-xl p-6 shadow">
+  <ScheduleCard appointments={appointments} />
+</div>
 
     {/* Floating View Tab Button */}
     <div className="fixed bottom-6 right-6">
