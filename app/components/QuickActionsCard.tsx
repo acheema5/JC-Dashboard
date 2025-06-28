@@ -15,6 +15,7 @@ import { ExpandableCard } from './ExpandableCard';
 
 interface QuickActionsCardProps {
   onSendSMS: (message: string) => void;
+  onCreatePromotion: (service: string) => void;
 }
 
 const mockNotifications = [
@@ -71,7 +72,7 @@ const quickActions = [
   },
 ];
 
-export function QuickActionsCard({ onSendSMS }: QuickActionsCardProps) {
+export function QuickActionsCard({ onSendSMS, onCreatePromotion }: QuickActionsCardProps) {
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const [customMessage, setCustomMessage] = useState('');
   const [notifications] = useState(mockNotifications);

@@ -13,16 +13,16 @@ import { InventoryItem } from '../types';
 
 interface InventoryTrackingCardProps {
   inventory: InventoryItem[];
-  onReorderItem: (itemId: string) => void;
+  onReorder: (itemId: string) => void;
   onUpdateThreshold: (itemId: string, threshold: number) => void;
   onToggleAutoReorder: (itemId: string) => void;
 }
 
 export function InventoryTrackingCard({
-  inventory,
-  onReorderItem,
-  onUpdateThreshold,
-  onToggleAutoReorder,
+  inventory, 
+  onReorder, 
+  onUpdateThreshold, 
+  onToggleAutoReorder 
 }: InventoryTrackingCardProps) {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
@@ -103,7 +103,7 @@ export function InventoryTrackingCard({
                   </div>
                 </div>
                 <Button
-                  onClick={() => onReorderItem(item.id)}
+                  onClick={() => onReorder(item.id)}
                   className="bg-red-600 hover:bg-red-700 text-white text-sm"
                 >
                   Reorder
@@ -185,7 +185,7 @@ export function InventoryTrackingCard({
                   
                   <div className="flex space-x-3">
                     <Button
-                      onClick={() => onReorderItem(item.id)}
+                      onClick={() => onReorder(item.id)}
                       className="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-medium"
                     >
                       Reorder Now
