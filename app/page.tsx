@@ -282,7 +282,7 @@ export default function BarberDashboard() {
   };
 
   return (
-   <div className="min-h-screen bg-gradient-to-br from-blue-800 via-blue-900 to-purple-900 p-6 text-white">
+   <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6 text-white">
     {/* Google Sheets Link */}
     <div className="w-full mb-4">
      <a
@@ -348,7 +348,7 @@ export default function BarberDashboard() {
      </div>
     </div>
 
-<div className="w-full mx-auto grid grid-cols-1 gap-8">
+<div className="max-w-[1700px] mx-auto px-4 grid grid-cols-1 gap-8">
 
   {/* Row 1: Quick Stats */}
   <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -403,7 +403,7 @@ export default function BarberDashboard() {
 </div>
 
 {/* Row 4: Full Width Weekly Schedule */}
-<div className="mt-6 bg-white rounded-xl p-6 shadow">
+<div className="max-w-[1800px] mx-auto px-4 mt-8">
   <ScheduleCard appointments={appointments} />
 </div>
 
