@@ -375,8 +375,8 @@ export default function BarberDashboard() {
     <AppointmentsOverviewCard
       stats={dashboardStats}
       appointments={appointments}
-      nextAppointment={nextAppointment || null}
-      onRunningLate={handleRunningLate}
+      //nextAppointment={nextAppointment || null}
+      //onRunningLate={handleRunningLate}
     />
     <AIInsightsCard
       stats={dashboardStats}
