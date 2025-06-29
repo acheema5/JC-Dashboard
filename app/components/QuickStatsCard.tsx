@@ -128,6 +128,7 @@ export function QuickStatsCard({
      previousValue: previousData.revenue,
      icon: <CurrencyDollarIcon className="w-6 h-6" />,
      bgColor: "bg-gradient-to-r from-green-500 to-green-600",
+     borderColor: "border-green-700",
      format: (val: number) => `$${val.toLocaleString()}`,
     };
    case "spending":
@@ -137,6 +138,7 @@ export function QuickStatsCard({
      previousValue: previousData.spending,
      icon: <BanknotesIcon className="w-6 h-6" />,
      bgColor: "bg-gradient-to-r from-red-500 to-red-600",
+      borderColor: "border-red-700",
      format: (val: number) => `$${val.toLocaleString()}`,
     };
    case "profit":
@@ -146,6 +148,7 @@ export function QuickStatsCard({
      previousValue: previousData.profit,
      icon: <ChartBarIcon className="w-6 h-6" />,
      bgColor: "bg-gradient-to-r from-blue-500 to-blue-600",
+      borderColor: "border-blue-700",
      format: (val: number) => `$${val.toLocaleString()}`,
     };
    case "bookings":
@@ -155,6 +158,7 @@ export function QuickStatsCard({
      previousValue: previousData.bookings,
      icon: <ChartBarIcon className="w-6 h-6" />,
      bgColor: "bg-gradient-to-r from-purple-500 to-purple-600",
+      borderColor: "border-purple-700",
      format: (val: number) => val.toString(),
     };
    default:
@@ -164,6 +168,7 @@ export function QuickStatsCard({
      previousValue: previousData.revenue,
      icon: <CurrencyDollarIcon className="w-6 h-6" />,
      bgColor: "bg-gradient-to-r from-green-500 to-green-600",
+      borderColor: "border-green-700",
      format: (val: number) => `$${val.toLocaleString()}`,
     };
   }
@@ -175,45 +180,47 @@ export function QuickStatsCard({
  const isNegative = change < 0;
 
  return (
-  <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300">
-   <div className={`${config.bgColor} p-4`}>
-    <div className="flex items-center justify-between text-white">
-     <div className="flex items-center space-x-3">
-      {config.icon}
-      <h3 className="text-lg font-semibold">{config.title}</h3>
-     </div>
-     <div className="text-right">
-      <div className="text-2xl font-bold">{config.format(config.value)}</div>
-      <div className="text-sm opacity-90">Last 30 days</div>
-     </div>
-    </div>
-   </div>
-
-   <div className="p-4">
+<div
+  className={`${config.bgColor} rounded-xl shadow-lg border ${config.borderColor} text-white hover:shadow-xl transition-shadow duration-300`}
+>
+  <div className="p-4">
     <div className="flex items-center justify-between">
-     <div className="text-sm text-gray-600">vs previous 30 days</div>
-     <div
-      className={`flex items-center space-x-1 text-sm font-medium ${
-       isPositive
-        ? "text-green-600"
-        : isNegative
-        ? "text-red-600"
-        : "text-gray-600"
-      }`}
-     >
-      {isPositive && <ArrowTrendingUpIcon className="w-4 h-4" />}
-      {isNegative && <ArrowTrendingDownIcon className="w-4 h-4" />}
-      <span>
-       {change > 0 ? "+" : ""}
-       {change}%
-      </span>
-     </div>
+      <div className="flex items-center space-x-3">
+        {config.icon}
+        <h3 className="text-lg font-semibold">{config.title}</h3>
+      </div>
+      <div className="text-right">
+        <div className="text-2xl font-bold">{config.format(config.value)}</div>
+        <div className="text-sm opacity-90">Last 30 days</div>
+      </div>
+    </div>
+  </div>
+
+  <div className="p-4 border-t border-white/20">
+    <div className="flex items-center justify-between">
+      <div className="text-sm text-white/70">vs previous 30 days</div>
+      <div
+        className={`flex items-center space-x-1 text-sm font-medium ${
+          isPositive
+            ? "text-green-200"
+            : isNegative
+            ? "text-red-200"
+            : "text-white/70"
+        }`}
+      >
+        {isPositive && <ArrowTrendingUpIcon className="w-4 h-4" />}
+        {isNegative && <ArrowTrendingDownIcon className="w-4 h-4" />}
+        <span>
+          {change > 0 ? "+" : ""}
+          {change}%
+        </span>
+      </div>
     </div>
 
-    <div className="mt-2 text-xs text-gray-500">
-     Previous: {config.format(config.previousValue)}
+    <div className="mt-2 text-xs text-white/50">
+      Previous: {config.format(config.previousValue)}
     </div>
-   </div>
   </div>
+</div>
  );
 }
