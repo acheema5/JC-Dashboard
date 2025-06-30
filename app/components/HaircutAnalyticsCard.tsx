@@ -21,7 +21,6 @@ export function HaircutAnalyticsCard({
 }: HaircutAnalyticsCardProps) {
   const [selectedAnalysis, setSelectedAnalysis] = useState<'popularity' | 'revenue' | 'timing'>('popularity');
 
-  // Calculate haircut popularity
   const haircutCounts = appointments.reduce((acc, apt) => {
     acc[apt.haircutType] = (acc[apt.haircutType] || 0) + 1;
     return acc;
@@ -29,7 +28,6 @@ export function HaircutAnalyticsCard({
 
   const mostPopularCut = Object.entries(haircutCounts).sort((a, b) => b[1] - a[1])[0];
 
-  // Calculate day of week analysis
   const dayCounts = appointments.reduce((acc, apt) => {
     const day = apt.date.toLocaleDateString('en-US', { weekday: 'long' });
     acc[day] = (acc[day] || 0) + 1;
@@ -39,10 +37,9 @@ export function HaircutAnalyticsCard({
   const slowestDay = Object.entries(dayCounts).sort((a, b) => a[1] - b[1])[0];
   const busiestDay = Object.entries(dayCounts).sort((a, b) => b[1] - a[1])[0];
 
-  // Collapsed content - shows most common cut this week
   const collapsedContent = (
     <div className="space-y-4">
-      <div className="bg-white rounded-lg p-4 border border-blue-200">
+      <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-4 border border-blue-100 shadow-sm">
         <div className="text-center">
           <div className="text-sm font-medium text-blue-600 uppercase tracking-wide">
             Most Popular Cut
@@ -57,7 +54,7 @@ export function HaircutAnalyticsCard({
       </div>
       
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-white rounded-lg p-3 border border-blue-200">
+        <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-3 border border-blue-100 shadow-sm">
           <div className="text-center">
             <div className="text-lg font-bold text-blue-800">
               ${stats.avgRevenuePerCut}
@@ -65,7 +62,7 @@ export function HaircutAnalyticsCard({
             <div className="text-xs text-blue-600">Avg Revenue/Cut</div>
           </div>
         </div>
-        <div className="bg-white rounded-lg p-3 border border-blue-200">
+        <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-3 border border-blue-100 shadow-sm">
           <div className="text-center">
             <div className="text-lg font-bold text-blue-800">
               ${stats.avgProfitPerCut}
@@ -77,10 +74,8 @@ export function HaircutAnalyticsCard({
     </div>
   );
 
-  // Expanded content - shows detailed analytics
   const expandedContent = (
     <div className="space-y-6">
-      {/* Analysis Type Selector */}
       <div className="flex space-x-2">
         {[
           { key: 'popularity', label: 'Cut Popularity', icon: <ChartBarIcon className="h-4 w-4" /> },
@@ -92,8 +87,8 @@ export function HaircutAnalyticsCard({
             onClick={() => setSelectedAnalysis(key as typeof selectedAnalysis)}
             className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors ${
               selectedAnalysis === key
-                ? 'bg-blue-100 text-blue-800 border border-blue-300'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-800 border border-blue-200 shadow-sm'
+                : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
             }`}
           >
             {icon}
@@ -102,16 +97,15 @@ export function HaircutAnalyticsCard({
         ))}
       </div>
 
-      {/* Cut Popularity Analysis */}
       {selectedAnalysis === 'popularity' && (
         <div className="space-y-4">
-          <div className="bg-white rounded-lg p-4 border border-blue-200">
+          <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-4 border border-blue-100 shadow-sm">
             <h5 className="font-semibold text-gray-800 mb-3">Cut Popularity Ranking</h5>
             <div className="space-y-3">
               {Object.entries(haircutCounts)
                 .sort((a, b) => b[1] - a[1])
                 .map(([cut, count], index) => (
-                  <div key={cut} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={cut} className="flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
                     <div className="flex items-center space-x-3">
                       <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
                         {index + 1}
@@ -129,11 +123,10 @@ export function HaircutAnalyticsCard({
         </div>
       )}
 
-      {/* Revenue Analysis */}
       {selectedAnalysis === 'revenue' && (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white rounded-lg p-4 border border-blue-200">
+            <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-4 border border-blue-100 shadow-sm">
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-800">
                   ${stats.avgRevenuePerCut}
@@ -141,7 +134,7 @@ export function HaircutAnalyticsCard({
                 <div className="text-sm text-blue-600">Average Revenue per Cut</div>
               </div>
             </div>
-            <div className="bg-white rounded-lg p-4 border border-blue-200">
+            <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-4 border border-blue-100 shadow-sm">
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-800">
                   ${stats.avgProfitPerCut}
@@ -151,7 +144,7 @@ export function HaircutAnalyticsCard({
             </div>
           </div>
           
-          <div className="bg-white rounded-lg p-4 border border-blue-200">
+          <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-4 border border-blue-100 shadow-sm">
             <h5 className="font-semibold text-gray-800 mb-3">Revenue by Cut Type</h5>
             <div className="space-y-3">
               {Object.entries(
@@ -162,7 +155,7 @@ export function HaircutAnalyticsCard({
               )
                 .sort((a, b) => b[1] - a[1])
                 .map(([cut, revenue]) => (
-                  <div key={cut} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                  <div key={cut} className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50 to-white hover:bg-blue-100 rounded-lg transition-colors">
                     <span className="font-medium text-gray-800">{cut}</span>
                     <span className="font-bold text-blue-800">${revenue}</span>
                   </div>
@@ -172,11 +165,10 @@ export function HaircutAnalyticsCard({
         </div>
       )}
 
-      {/* Timing Insights */}
       {selectedAnalysis === 'timing' && (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white rounded-lg p-4 border border-blue-200">
+            <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-4 border border-blue-100 shadow-sm">
               <div className="text-center">
                 <ArrowTrendingUpIcon className="h-8 w-8 text-green-600 mx-auto mb-2" />
                 <div className="text-lg font-bold text-green-800">
@@ -188,7 +180,7 @@ export function HaircutAnalyticsCard({
                 </div>
               </div>
             </div>
-            <div className="bg-white rounded-lg p-4 border border-blue-200">
+            <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-4 border border-blue-100 shadow-sm">
               <div className="text-center">
                 <ArrowTrendingDownIcon className="h-8 w-8 text-red-600 mx-auto mb-2" />
                 <div className="text-lg font-bold text-red-800">
@@ -202,18 +194,18 @@ export function HaircutAnalyticsCard({
             </div>
           </div>
           
-          <div className="bg-white rounded-lg p-4 border border-blue-200">
+          <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-4 border border-blue-100 shadow-sm">
             <h5 className="font-semibold text-gray-800 mb-3">Daily Booking Distribution</h5>
             <div className="space-y-3">
               {Object.entries(dayCounts)
                 .sort((a, b) => b[1] - a[1])
                 .map(([day, count]) => (
-                  <div key={day} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                  <div key={day} className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50 to-white hover:bg-blue-100 rounded-lg transition-colors">
                     <span className="font-medium text-gray-800">{day}</span>
                     <div className="flex items-center space-x-2">
-                      <div className="w-20 bg-gray-200 rounded-full h-2">
+                      <div className="w-28 bg-gray-200 rounded-full h-3">
                         <div 
-                          className="bg-blue-600 h-2 rounded-full" 
+                          className="bg-blue-600 h-3 rounded-full" 
                           style={{ width: `${(count / Math.max(...Object.values(dayCounts))) * 100}%` }}
                         ></div>
                       </div>
@@ -240,4 +232,4 @@ export function HaircutAnalyticsCard({
       {expandedContent}
     </ExpandableCard>
   );
-} 
+}
