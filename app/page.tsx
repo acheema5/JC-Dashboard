@@ -306,10 +306,10 @@ export default function BarberDashboard() {
     {/* Header */}
     <div className="max-w-7xl mx-auto mb-8">
      <div className="text-center">
-      <h1 className="text-4xl font-bold text-white-900 mb-2 
+      <h1 className="text-5xl font-bold text-blue-800 mb-2 
                     transition-transform transition-colors duration-300 ease-in-out
                     hover:text-purple-500 hover:scale-105
-                    ">
+                    " style={{ fontFamily: 'Bookmania, serif' }}>
        JC BarbieCuts Dashboard
       </h1>
 

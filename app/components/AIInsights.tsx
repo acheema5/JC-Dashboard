@@ -112,7 +112,7 @@ export function AIInsights({ onSendSMS, onCreatePromotion }: AIInsightsProps) {
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
           <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-          <h3 className="text-lg font-semibold text-blue-800">AI Insights</h3>
+          <h3 className="text-3xl font-bold text-blue-800" style={{ fontFamily: 'Bookmania, serif' }}>AI Insights</h3>
         </div>
         
         <div className="space-y-3">

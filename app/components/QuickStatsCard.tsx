@@ -154,7 +154,7 @@ export function QuickStatsCard({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="text-blue-600">{config.icon}</div>
-            <h3 className="text-lg font-semibold text-blue-800">{config.title}</h3>
+            <h3 className="text-2xl font-bold text-blue-800" style={{ fontFamily: 'Bookmania, serif' }}>{config.title}</h3>
           </div>
           <div className="text-right">
             <div className="text-2xl font-bold text-blue-800">
