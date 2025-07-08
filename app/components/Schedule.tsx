@@ -82,10 +82,10 @@ export function Schedule({ appointments }: ScheduleProps) {
   };
 
   return (
-    <div className="bg-gray-900 text-white h-full flex flex-col">
-      <div className="px-6 py-4 border-b border-gray-700">
-        <h1 className="text-2xl font-semibold">Weekly Schedule</h1>
-        <p className="text-gray-400 text-sm mt-1">
+    <div className="bg-gradient-to-br from-blue-50 to-blue-100 text-blue-800 h-full flex flex-col">
+      <div className="px-6 py-4 border-b border-blue-300">
+        <h1 className="text-2xl font-semibold text-blue-800">Weekly Schedule</h1>
+        <p className="text-blue-600 text-sm mt-1">
           {weekDates[0].toLocaleDateString("en-US", {
             month: "long",
             day: "numeric",
@@ -100,15 +100,15 @@ export function Schedule({ appointments }: ScheduleProps) {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        <div className="w-20 flex-shrink-0 border-r border-gray-700">
-          <div className="h-16 border-b border-gray-700"></div>
+        <div className="w-20 flex-shrink-0 border-r border-blue-300">
+          <div className="h-16 border-b border-blue-300"></div>
           <div className="relative">
             {timeSlots.map((slot) => (
               <div
                 key={slot.hour24}
-                className="h-20 border-b border-gray-700 flex items-start justify-end pr-3 pt-2"
+                className="h-20 border-b border-blue-300 flex items-start justify-end pr-3 pt-2"
               >
-                <span className="text-sm text-gray-400 font-medium">
+                <span className="text-sm text-blue-600 font-medium">
                   {slot.display}
                 </span>
               </div>
@@ -116,7 +116,7 @@ export function Schedule({ appointments }: ScheduleProps) {
           </div>
         </div>
 
-        <div className="flex-1 grid grid-cols-7 divide-x divide-gray-700">
+        <div className="flex-1 grid grid-cols-7 divide-x divide-blue-300">
           {weekDates.map((date, dayIndex) => {
             const dayName = fullWeekdays[dayIndex];
             const isToday =
@@ -128,14 +128,14 @@ export function Schedule({ appointments }: ScheduleProps) {
               <div key={dayIndex} className="flex flex-col min-w-0">
                 <div
                   className={clsx(
-                    "h-16 border-b border-gray-700 flex flex-col items-center justify-center",
-                    isToday ? "bg-blue-800" : "bg-gray-800"
+                    "h-16 border-b border-blue-300 flex flex-col items-center justify-center",
+                    isToday ? "bg-blue-200" : "bg-white/60"
                   )}
                 >
-                  <div className="text-sm font-medium text-gray-300">
+                  <div className="text-sm font-medium text-blue-800">
                     {weekdays[dayIndex]}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-xs text-blue-600 mt-1">
                     {date.getDate()}
                   </div>
                 </div>
@@ -144,7 +144,7 @@ export function Schedule({ appointments }: ScheduleProps) {
                   {timeSlots.map((slot, index) => (
                     <div
                       key={slot.hour24}
-                      className="absolute w-full h-20 border-b border-gray-800"
+                      className="absolute w-full h-20 border-b border-blue-200"
                       style={{ top: `${index * 80}px` }}
                     />
                   ))}
