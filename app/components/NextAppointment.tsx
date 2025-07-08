@@ -10,7 +10,7 @@ interface NextAppointmentProps {
 export function NextAppointment({ nextAppointment }: NextAppointmentProps) {
   if (!nextAppointment) {
     return (
-      <div className="text-center text-gray-400 bg-slate-800 rounded-md p-6 border border-slate-700">
+      <div className="text-center text-blue-600 bg-gradient-to-br from-blue-50 to-blue-100 rounded-md p-6 border border-blue-200">
         No upcoming appointments
       </div>
     );

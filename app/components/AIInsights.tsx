@@ -108,11 +108,11 @@ export function AIInsights({ onSendSMS, onCreatePromotion }: AIInsightsProps) {
   };
 
   return (
-    <Card className="bg-gradient-to-r from-emerald-50 to-emerald-100 border-emerald-200">
+    <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200">
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
-          <h3 className="text-lg font-semibold text-emerald-800">AI Insights</h3>
+          <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+          <h3 className="text-lg font-semibold text-blue-800">AI Insights</h3>
         </div>
         
         <div className="space-y-3">
@@ -144,7 +144,7 @@ export function AIInsights({ onSendSMS, onCreatePromotion }: AIInsightsProps) {
                         <div className="ml-4 space-y-2">
                           <Button 
                             onClick={() => handleAction(insight)}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm w-full"
+                            className="bg-blue-600 hover:bg-blue-700 text-white text-sm w-full"
                           >
                             {insight.action}
                           </Button>

@@ -81,24 +81,24 @@ export function QuickActionsCard({ onSendSMS, onCreatePromotion }: QuickActionsC
 
   const collapsedContent = (
     <div className="space-y-4">
-      <div className="rounded-lg p-4 border border-white/10 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+      <div className="rounded-lg p-4 border border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100">
         <div className="text-center">
-          <div className="text-sm font-medium text-gray-400 uppercase tracking-wide">
+          <div className="text-sm font-medium text-blue-600 uppercase tracking-wide">
             Notifications
           </div>
-          <div className="text-2xl font-bold text-white mt-1">{unreadCount}</div>
-          <div className="text-sm text-gray-400 mt-1">Unread messages</div>
+          <div className="text-2xl font-bold text-blue-800 mt-1">{unreadCount}</div>
+          <div className="text-sm text-blue-600 mt-1">Unread messages</div>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-lg p-3 border border-white/10 bg-slate-800 text-center">
-          <ChatBubbleLeftRightIcon className="h-5 w-5 text-gray-300 mx-auto mb-1" />
-          <div className="text-xs text-gray-300">Quick SMS</div>
+        <div className="rounded-lg p-3 border border-blue-200 bg-white text-center">
+          <ChatBubbleLeftRightIcon className="h-5 w-5 text-blue-600 mx-auto mb-1" />
+          <div className="text-xs text-blue-600">Quick SMS</div>
         </div>
-        <div className="rounded-lg p-3 border border-white/10 bg-slate-800 text-center">
-          <BellIcon className="h-5 w-5 text-gray-300 mx-auto mb-1" />
-          <div className="text-xs text-gray-300">Alerts</div>
+        <div className="rounded-lg p-3 border border-blue-200 bg-white text-center">
+          <BellIcon className="h-5 w-5 text-blue-600 mx-auto mb-1" />
+          <div className="text-xs text-blue-600">Alerts</div>
         </div>
       </div>
     </div>
@@ -107,27 +107,27 @@ export function QuickActionsCard({ onSendSMS, onCreatePromotion }: QuickActionsC
   const expandedContent = (
     <div className="space-y-6">
       <div>
-        <h5 className="font-semibold text-white mb-3">Recent Notifications</h5>
+        <h5 className="font-semibold text-blue-800 mb-3">Recent Notifications</h5>
         <div className="space-y-3">
           {notifications.map((notification) => (
             <div
               key={notification.id}
               className={`p-3 rounded-lg border transition-all ${
                 notification.unread
-                  ? 'bg-gradient-to-r from-blue-900 via-purple-900 to-slate-900 border-blue-600'
-                  : 'bg-slate-800 border-slate-700'
+                  ? 'bg-gradient-to-r from-blue-50 to-blue-100 border-blue-300'
+                  : 'bg-white border-blue-200'
               }`}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-2">
-                    <h6 className="font-medium text-white">{notification.title}</h6>
+                    <h6 className="font-medium text-blue-800">{notification.title}</h6>
                     {notification.unread && (
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                     )}
                   </div>
-                  <p className="text-sm text-gray-300 mt-1">{notification.message}</p>
-                  <div className="text-xs text-gray-500 mt-2">{notification.time}</div>
+                  <p className="text-sm text-blue-700 mt-1">{notification.message}</p>
+                  <div className="text-xs text-blue-600 mt-2">{notification.time}</div>
                 </div>
               </div>
             </div>
@@ -136,7 +136,7 @@ export function QuickActionsCard({ onSendSMS, onCreatePromotion }: QuickActionsC
       </div>
 
       <div>
-        <h5 className="font-semibold text-white mb-3">Quick Actions</h5>
+        <h5 className="font-semibold text-blue-800 mb-3">Quick Actions</h5>
         <div className="grid grid-cols-2 gap-3">
           {quickActions.map((action) => (
             <button
@@ -144,13 +144,13 @@ export function QuickActionsCard({ onSendSMS, onCreatePromotion }: QuickActionsC
               onClick={() => setSelectedAction(selectedAction === action.id ? null : action.id)}
               className={`p-3 rounded-lg border transition-all ${
                 selectedAction === action.id
-                  ? 'ring-2 ring-purple-600 bg-slate-800'
-                  : 'bg-slate-800 border-slate-700 hover:bg-slate-700'
+                  ? 'ring-2 ring-blue-500 bg-blue-50'
+                  : 'bg-white border-blue-200 hover:bg-blue-50'
               }`}
             >
               <div className="flex items-center space-x-2">
-                <div className="text-gray-300">{action.icon}</div>
-                <span className="text-sm font-medium text-white">{action.title}</span>
+                <div className="text-blue-600">{action.icon}</div>
+                <span className="text-sm font-medium text-blue-800">{action.title}</span>
               </div>
             </button>
           ))}
@@ -158,31 +158,31 @@ export function QuickActionsCard({ onSendSMS, onCreatePromotion }: QuickActionsC
       </div>
 
       {selectedAction && (
-        <div className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-lg p-4 border border-purple-700">
-          <h6 className="font-semibold text-white mb-3">
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-300">
+          <h6 className="font-semibold text-blue-800 mb-3">
             {quickActions.find((a) => a.id === selectedAction)?.title}
           </h6>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
+              <label className="block text-sm font-medium text-blue-700 mb-2">
                 Message Preview
               </label>
-              <div className="bg-slate-700 rounded-lg p-3 border border-slate-600">
-                <p className="text-sm text-gray-200">
+              <div className="bg-white rounded-lg p-3 border border-blue-200">
+                <p className="text-sm text-blue-800">
                   {quickActions.find((a) => a.id === selectedAction)?.message}
                 </p>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
+              <label className="block text-sm font-medium text-blue-700 mb-2">
                 Customize Message (Optional)
               </label>
               <textarea
                 value={customMessage}
                 onChange={(e) => setCustomMessage(e.target.value)}
                 placeholder="Customize the message..."
-                className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-800 text-white focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                className="w-full px-3 py-2 border border-blue-300 rounded-lg bg-white text-blue-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 rows={3}
               />
             </div>
@@ -197,7 +197,7 @@ export function QuickActionsCard({ onSendSMS, onCreatePromotion }: QuickActionsC
                 setSelectedAction(null);
                 setCustomMessage('');
               }}
-              className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold shadow-md"
+              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold shadow-md"
             >
               <ChatBubbleLeftRightIcon className="h-4 w-4 mr-2" />
               Send Message
@@ -206,8 +206,8 @@ export function QuickActionsCard({ onSendSMS, onCreatePromotion }: QuickActionsC
         </div>
       )}
 
-      <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
-        <h5 className="font-semibold text-white mb-3">Automation Status</h5>
+      <div className="bg-white rounded-lg p-4 border border-blue-200">
+        <h5 className="font-semibold text-blue-800 mb-3">Automation Status</h5>
         <div className="grid grid-cols-2 gap-4">
           <StatusDot label="SMS Gateway Active" color="green" />
           <StatusDot label="n8n Connected" color="green" />
@@ -228,8 +228,8 @@ export function QuickActionsCard({ onSendSMS, onCreatePromotion }: QuickActionsC
     <ExpandableCard
       title="Quick Actions"
       subtitle="Message center and automation controls"
-      icon={<BoltIcon className="h-6 w-6 text-gray-300" />}
-      variant="default"
+      icon={<BoltIcon className="h-6 w-6 text-blue-600" />}
+      variant="info"
       collapsedContent={collapsedContent}
       defaultExpanded={false}
     >
@@ -248,17 +248,17 @@ function StatusDot({ label, color }: { label: string; color: string }) {
   return (
     <div className="flex items-center space-x-2">
       <div className={`w-3 h-3 rounded-full ${colorMap[color]}`}></div>
-      <span className="text-sm text-gray-300">{label}</span>
+      <span className="text-sm text-blue-700">{label}</span>
     </div>
   );
 }
 
 function StatBox({ label, value }: { label: string; value: number }) {
   return (
-    <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
+    <div className="bg-white rounded-lg p-4 border border-blue-200">
       <div className="text-center">
-        <div className="text-lg font-bold text-white">{value}</div>
-        <div className="text-sm text-gray-400">{label}</div>
+        <div className="text-lg font-bold text-blue-800">{value}</div>
+        <div className="text-sm text-blue-600">{label}</div>
       </div>
     </div>
   );

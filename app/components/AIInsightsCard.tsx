@@ -80,7 +80,7 @@ export function AIInsightsCard({
       case 'medium':
         return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case 'low':
-        return 'text-green-600 bg-green-50 border-green-200';
+        return 'text-blue-600 bg-blue-50 border-blue-200';
       default:
         return 'text-gray-600 bg-gray-50 border-gray-200';
     }
@@ -105,10 +105,10 @@ export function AIInsightsCard({
   const collapsedContent = (
     <div className="space-y-4">
       {topInsight ? (
-        <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-4 border-2 border-purple-300">
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border-2 border-blue-300">
           <div className="flex items-center space-x-2 mb-2">
-            <SparklesIcon className="h-4 w-4 text-purple-600" />
-            <h4 className="font-bold text-purple-800 text-sm">TOP AI RECOMMENDATION</h4>
+            <SparklesIcon className="h-4 w-4 text-blue-600" />
+            <h4 className="font-bold text-blue-800 text-sm">TOP AI RECOMMENDATION</h4>
           </div>
           <div className="text-sm">
             <div className="font-bold text-gray-800">{topInsight.title}</div>
@@ -116,29 +116,29 @@ export function AIInsightsCard({
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-lg p-4 border border-purple-200 text-center text-gray-500">
+        <div className="bg-white rounded-lg p-4 border border-blue-200 text-center text-gray-500">
           No AI insights available
         </div>
       )}
       
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-white rounded-lg p-3 border border-purple-200 text-center">
-          <div className="text-lg font-bold text-purple-800">
+        <div className="bg-white rounded-lg p-3 border border-blue-200 text-center">
+          <div className="text-lg font-bold text-blue-800">
             {insights.filter(i => i.priority === 'high').length}
           </div>
-          <div className="text-xs text-purple-600">High Priority</div>
+          <div className="text-xs text-blue-600">High Priority</div>
         </div>
-        <div className="bg-white rounded-lg p-3 border border-purple-200 text-center">
-          <div className="text-lg font-bold text-purple-800">
+        <div className="bg-white rounded-lg p-3 border border-blue-200 text-center">
+          <div className="text-lg font-bold text-blue-800">
             {insights.filter(i => i.priority === 'medium').length}
           </div>
-          <div className="text-xs text-purple-600">Medium Priority</div>
+          <div className="text-xs text-blue-600">Medium Priority</div>
         </div>
-        <div className="bg-white rounded-lg p-3 border border-purple-200 text-center">
-          <div className="text-lg font-bold text-purple-800">
+        <div className="bg-white rounded-lg p-3 border border-blue-200 text-center">
+          <div className="text-lg font-bold text-blue-800">
             {insights.filter(i => i.priority === 'low').length}
           </div>
-          <div className="text-xs text-purple-600">Low Priority</div>
+          <div className="text-xs text-blue-600">Low Priority</div>
         </div>
       </div>
     </div>
@@ -154,7 +154,7 @@ export function AIInsightsCard({
             key={insight.id}
             className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
               selectedInsight?.id === insight.id
-                ? 'ring-2 ring-purple-500'
+                ? 'ring-2 ring-blue-500'
                 : 'bg-white border-gray-200'
             }`}
             onClick={() => setSelectedInsight(insight)}
@@ -172,7 +172,7 @@ export function AIInsightsCard({
                     </span>
                   </div>
                   <p className="text-sm text-gray-600 mb-2">{insight.description}</p>
-                  <div className="text-sm font-medium text-purple-600">
+                  <div className="text-sm font-medium text-blue-600">
                     💡 {insight.action}
                   </div>
                 </div>
@@ -184,12 +184,12 @@ export function AIInsightsCard({
 
       {/* Selected Insight Actions */}
       {selectedInsight && (
-        <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-6 border-2 border-purple-300">
-          <h4 className="font-bold text-purple-800 mb-4">Take Action</h4>
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-6 border-2 border-blue-300">
+          <h4 className="font-bold text-blue-800 mb-4">Take Action</h4>
           <div className="space-y-4">
             <div>
               <h5 className="font-semibold text-gray-800 mb-2">Suggested SMS Message:</h5>
-              <div className="bg-white rounded-lg p-3 border border-purple-200">
+              <div className="bg-white rounded-lg p-3 border border-blue-200">
                 <p className="text-sm text-gray-700">{selectedInsight.smsMessage}</p>
               </div>
             </div>
@@ -197,7 +197,7 @@ export function AIInsightsCard({
             <div className="flex space-x-3">
               <Button
                 onClick={() => onSendSMS(selectedInsight.smsMessage || '')}
-                className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-medium"
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium"
               >
                 <ChatBubbleLeftRightIcon className="h-4 w-4 mr-2" />
                 Send SMS Campaign
@@ -217,7 +217,7 @@ export function AIInsightsCard({
       )}
 
       {/* Automation Status */}
-      <div className="bg-white rounded-lg p-4 border border-purple-200">
+      <div className="bg-white rounded-lg p-4 border border-blue-200">
         <h5 className="font-semibold text-gray-800 mb-3">Automation Status</h5>
         <div className="grid grid-cols-2 gap-4">
           <div className="flex items-center space-x-2">
@@ -245,8 +245,8 @@ export function AIInsightsCard({
     <ExpandableCard
       title="AI Insights"
       subtitle="Intelligent recommendations and automation"
-      icon={<LightBulbIcon className="h-6 w-6 text-purple-600" />}
-      variant="default"
+      icon={<LightBulbIcon className="h-6 w-6 text-blue-600" />}
+      variant="info"
       collapsedContent={collapsedContent}
       defaultExpanded={false}
     >
