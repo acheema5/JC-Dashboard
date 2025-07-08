@@ -282,7 +282,7 @@ export default function BarberDashboard() {
   };
 
   return (
-   <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6 text-white">
+   <div className="min-h-screen bg-white p-6 text-gray-900">
     {/* Google Sheets Link */}
     <div className="w-full mb-4">
      <a

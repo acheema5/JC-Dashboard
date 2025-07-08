@@ -12,45 +12,45 @@ export function QuickStats({ revenue, spending, profit }: QuickStatsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {/* Revenue */}
-      <Card className="bg-gradient-to-br from-black to-green-600 text-white border border-transparent shadow-md">
+      <Card className="bg-gradient-to-br from-blue-50 to-blue-100 text-blue-800 border border-blue-200 shadow-md">
         <div className="text-center">
-          <h3 className="text-sm font-medium uppercase tracking-wide">
+          <h3 className="text-sm font-medium uppercase tracking-wide text-blue-700">
             Revenue
           </h3>
-          <p className="text-3xl font-bold mt-2">
+          <p className="text-3xl font-bold mt-2 text-blue-800">
             ${revenue.toLocaleString()}
           </p>
-          <p className="text-sm text-white-100 mt-1">
+          <p className="text-sm text-blue-600 mt-1">
             +12% from last week
           </p>
         </div>
       </Card>
 
       {/* Spending */}
-      <Card className="bg-gradient-to-br from-black to-red-600 text-white border border-transparent shadow-md">
+      <Card className="bg-gradient-to-br from-blue-50 to-blue-100 text-blue-800 border border-blue-200 shadow-md">
         <div className="text-center">
-          <h3 className="text-sm font-medium uppercase tracking-wide">
+          <h3 className="text-sm font-medium uppercase tracking-wide text-blue-700">
             Spending
           </h3>
-          <p className="text-3xl font-bold mt-2">
+          <p className="text-3xl font-bold mt-2 text-blue-800">
             ${spending.toLocaleString()}
           </p>
-          <p className="text-sm text-red-100 mt-1">
+          <p className="text-sm text-blue-600 mt-1">
             -5% from last week
           </p>
         </div>
       </Card>
 
       {/* Profit */}
-      <Card className="bg-gradient-to-br from-black to-purple-700 text-white border border-transparent shadow-md">
+      <Card className="bg-gradient-to-br from-blue-50 to-blue-100 text-blue-800 border border-blue-200 shadow-md">
         <div className="text-center">
-          <h3 className="text-sm font-medium uppercase tracking-wide">
+          <h3 className="text-sm font-medium uppercase tracking-wide text-blue-700">
             Profit
           </h3>
-          <p className="text-3xl font-bold mt-2">
+          <p className="text-3xl font-bold mt-2 text-blue-800">
             ${profit.toLocaleString()}
           </p>
-          <p className="text-sm text-blue-100 mt-1">
+          <p className="text-sm text-blue-600 mt-1">
             +18% from last week
           </p>
         </div>

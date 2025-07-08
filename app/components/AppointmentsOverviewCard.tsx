@@ -75,11 +75,22 @@ export function AppointmentsOverviewCard({
           {getBookingCount()}
         </div>
         <div className="text-lg font-medium text-gray-600 tracking-wide">
-          bookings this <span className="text-blue-600 font-extrabold">{viewMode}</span>
+          bookings{" "}
+          {viewMode === "today" ? (
+            <span className="text-blue-600 font-extrabold">today</span>
+          ) : (
+            <>
+              this{" "}
+              <span className="text-blue-600 font-extrabold">
+                {viewMode}
+              </span>
+            </>
+          )}
         </div>
       </div>
     </div>
   );
+  
 
   const expandedContent = (
     <div className="space-y-6">
@@ -224,7 +235,9 @@ export function AppointmentsOverviewCard({
   return (
     <ExpandableCard
       title="Appointments Overview"
-      subtitle={`${getBookingCount()} bookings this ${viewMode}`}
+      subtitle={`${getBookingCount()} bookings${
+        viewMode === "today" ? " today" : ` this ${viewMode}`
+      }`}
       icon={<CalendarIcon className="w-5 h-5" />}
       variant="info"
       collapsedContent={collapsedContent}
@@ -232,5 +245,5 @@ export function AppointmentsOverviewCard({
     >
       {expandedContent}
     </ExpandableCard>
-  );
+  );  
 }

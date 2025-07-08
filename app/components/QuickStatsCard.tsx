@@ -94,8 +94,8 @@ export function QuickStatsCard({
           value: currentData.revenue,
           previousValue: previousData.revenue,
           icon: <CurrencyDollarIcon className="w-6 h-6" />,
-          bgColor: "bg-gradient-to-r from-black to-green-600",
-          borderColor: "border-black",
+          bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
+          borderColor: "border-blue-200",
           format: (val: number) => `$${val.toLocaleString()}`,
         };
       case "spending":
@@ -104,8 +104,8 @@ export function QuickStatsCard({
           value: currentData.spending,
           previousValue: previousData.spending,
           icon: <BanknotesIcon className="w-6 h-6" />,
-          bgColor: "bg-gradient-to-r from-black to-red-600",
-          borderColor: "border-black",
+          bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
+          borderColor: "border-blue-200",
           format: (val: number) => `$${val.toLocaleString()}`,
         };
       case "profit":
@@ -114,8 +114,8 @@ export function QuickStatsCard({
           value: currentData.profit,
           previousValue: previousData.profit,
           icon: <ChartBarIcon className="w-6 h-6" />,
-          bgColor: "bg-gradient-to-r from-black to-blue-600",
-          borderColor: "border-black",
+          bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
+          borderColor: "border-blue-200",
           format: (val: number) => `$${val.toLocaleString()}`,
         };
       case "bookings":
@@ -124,8 +124,8 @@ export function QuickStatsCard({
           value: currentData.bookings,
           previousValue: previousData.bookings,
           icon: <ChartBarIcon className="w-6 h-6" />,
-          bgColor: "bg-gradient-to-r from-black to-purple-600",
-          borderColor: "border-black",
+          bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
+          borderColor: "border-blue-200",
           format: (val: number) => val.toString(),
         };
       default:
@@ -134,8 +134,8 @@ export function QuickStatsCard({
           value: currentData.revenue,
           previousValue: previousData.revenue,
           icon: <CurrencyDollarIcon className="w-6 h-6" />,
-          bgColor: "bg-gradient-to-r from-black to-green-600",
-          borderColor: "border-black",
+          bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
+          borderColor: "border-blue-200",
           format: (val: number) => `$${val.toLocaleString()}`,
         };
     }
@@ -148,33 +148,33 @@ export function QuickStatsCard({
 
   return (
     <div
-      className={`${config.bgColor} rounded-xl shadow-lg border ${config.borderColor} text-white hover:shadow-xl transition-shadow duration-300`}
+      className={`${config.bgColor} rounded-xl shadow-lg border ${config.borderColor} text-blue-800 hover:shadow-xl transition-shadow duration-300`}
     >
       <div className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            {config.icon}
-            <h3 className="text-lg font-semibold">{config.title}</h3>
+            <div className="text-blue-600">{config.icon}</div>
+            <h3 className="text-lg font-semibold text-blue-800">{config.title}</h3>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-blue-800">
               {config.format(config.value)}
             </div>
-            <div className="text-sm opacity-90">Last 30 days</div>
+            <div className="text-sm text-blue-600">Last 30 days</div>
           </div>
         </div>
       </div>
 
-      <div className="p-4 border-t border-white/20">
+      <div className="p-4 border-t border-blue-300">
         <div className="flex items-center justify-between">
-          <div className="text-sm text-white/70">vs previous 30 days</div>
+          <div className="text-sm text-blue-700">vs previous 30 days</div>
           <div
             className={`flex items-center space-x-1 text-sm font-medium ${
               isPositive
-                ? "text-green-200"
+                ? "text-green-600"
                 : isNegative
-                ? "text-red-200"
-                : "text-white/70"
+                ? "text-red-600"
+                : "text-blue-600"
             }`}
           >
             {isPositive && <ArrowTrendingUpIcon className="w-4 h-4" />}
@@ -186,7 +186,7 @@ export function QuickStatsCard({
           </div>
         </div>
 
-        <div className="mt-2 text-xs text-white/50">
+        <div className="mt-2 text-xs text-blue-600">
           Previous: {config.format(config.previousValue)}
         </div>
       </div>
