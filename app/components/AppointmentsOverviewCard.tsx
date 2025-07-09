@@ -241,7 +241,7 @@ export function AppointmentsOverviewCard({
       icon={<CalendarIcon className="w-5 h-5" />}
       variant="info"
       collapsedContent={collapsedContent}
-      defaultExpanded={true}
+      defaultExpanded={false}
     >
       {expandedContent}
     </ExpandableCard>
