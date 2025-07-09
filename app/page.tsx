@@ -407,12 +407,7 @@ export default function BarberDashboard() {
   <ScheduleCard appointments={appointments} />
 </div>
 
-    {/* Floating View Tab Button */}
-    <div className="fixed bottom-6 right-6">
-     <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow-lg transition-colors">
-      View Tab
-     </button>
-    </div>
+
    </div>
   );
 }
