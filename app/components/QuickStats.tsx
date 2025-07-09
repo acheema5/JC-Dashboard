@@ -14,7 +14,7 @@ export function QuickStats({ revenue, spending, profit }: QuickStatsProps) {
       {/* Revenue */}
       <Card className="bg-gradient-to-br from-blue-50 to-blue-100 text-blue-800 border border-blue-200 shadow-md">
         <div className="text-center">
-          <h3 className="text-xl font-bold uppercase tracking-wide text-blue-700" style={{ fontFamily: 'Bookmania, serif' }}>
+          <h3 className="text-xl font-bold uppercase tracking-wide text-blue-700">
             Revenue
           </h3>
           <p className="text-3xl font-bold mt-2 text-blue-800">
@@ -29,7 +29,7 @@ export function QuickStats({ revenue, spending, profit }: QuickStatsProps) {
       {/* Spending */}
       <Card className="bg-gradient-to-br from-blue-50 to-blue-100 text-blue-800 border border-blue-200 shadow-md">
         <div className="text-center">
-          <h3 className="text-xl font-bold uppercase tracking-wide text-blue-700" style={{ fontFamily: 'Bookmania, serif' }}>
+          <h3 className="text-xl font-bold uppercase tracking-wide text-blue-700">
             Spending
           </h3>
           <p className="text-3xl font-bold mt-2 text-blue-800">
@@ -44,7 +44,7 @@ export function QuickStats({ revenue, spending, profit }: QuickStatsProps) {
       {/* Profit */}
       <Card className="bg-gradient-to-br from-blue-50 to-blue-100 text-blue-800 border border-blue-200 shadow-md">
         <div className="text-center">
-          <h3 className="text-xl font-bold uppercase tracking-wide text-blue-700" style={{ fontFamily: 'Bookmania, serif' }}>
+          <h3 className="text-xl font-bold uppercase tracking-wide text-blue-700">
             Profit
           </h3>
           <p className="text-3xl font-bold mt-2 text-blue-800">

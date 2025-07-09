@@ -57,7 +57,7 @@ export function ExpandableCard({
           <div className="flex items-center space-x-3">
             {icon && <div className="flex-shrink-0">{icon}</div>}
             <div>
-              <h3 className={cn('text-2xl font-bold', variantTextStyles[variant])} style={{ fontFamily: 'Bookmania, serif' }}>
+              <h3 className={cn('text-2xl font-bold', variantTextStyles[variant])}>
                 {title}
               </h3>
               {subtitle && (

@@ -84,7 +84,7 @@ export function Schedule({ appointments }: ScheduleProps) {
   return (
     <div className="bg-gradient-to-br from-blue-50 to-blue-100 text-blue-800 h-full flex flex-col">
       <div className="px-6 py-4 border-b border-blue-300">
-        <h1 className="text-4xl font-bold text-blue-800" style={{ fontFamily: 'Bookmania, serif' }}>Weekly Schedule</h1>
+        <h1 className="text-4xl font-bold text-blue-800">Weekly Schedule</h1>
         <p className="text-blue-600 text-sm mt-1">
           {weekDates[0].toLocaleDateString("en-US", {
             month: "long",

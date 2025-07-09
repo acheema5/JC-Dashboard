@@ -34,11 +34,11 @@ export function NextAppointmentCard({
       {/* Header with icon */}
       <div className="flex items-center space-x-2 mb-8">
         <ClockIcon className="h-6 w-6 text-blue-600" />
-        <h3 className="text-3xl font-bold text-blue-800" style={{ fontFamily: 'Bookmania, serif' }}>Next Appointment</h3>
+        <h3 className="text-3xl font-bold text-blue-800">Next Appointment</h3>
       </div>
 
       {/* Client Name centered big */}
-      <h2 className="text-4xl font-extrabold mb-8 text-center text-blue-800">{clientName}</h2>
+      <h2 className="text-5xl font-extrabold mb-10 text-center text-blue-800">{clientName}</h2>
 
       {/* Details left aligned with translucent border and spacing */}
       <div className="space-y-4">
