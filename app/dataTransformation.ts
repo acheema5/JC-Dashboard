@@ -1,27 +1,32 @@
-// Updated transformation utility for webhook format with AI insights
+// Updated transformation utility for webhook format with appointments, expenses, and AI insights
 
 export interface WebhookAppointment {
  id: string;
  clientName: string;
- phoneNumber: number; // Note: webhook returns number
+ phoneNumber: number;
  haircutType: string;
  duration: number;
  price: number;
- date: string; // Format: "6/26/2025"
- time: string; // Format: "12:30 PM"
- status: boolean; // false = scheduled, true = completed
+ date: string;
+ time: string;
+ status: boolean;
 }
 
 export interface Appointment {
  id: string;
  clientName: string;
- phoneNumber: string; // Frontend expects string
+ phoneNumber: string;
  haircutType: string;
- date: Date; // Frontend expects Date object
+ date: Date;
  duration: number;
  price: number;
- cost: number; // Missing from webhook, needs estimation
- status: "scheduled" | "completed"; // Frontend expects string
+ cost: number;
+ status: "scheduled" | "completed";
+}
+
+export interface Expense {
+ date: Date;
+ amount: number;
 }
 
 export interface AIInsights {
@@ -37,6 +42,7 @@ export interface AIInsights {
 
 export interface TransformedData {
  appointments: Appointment[];
+ expenses: Expense[];
  aiInsights: AIInsights | null;
 }
 
@@ -58,13 +64,23 @@ const HAIRCUT_COSTS: Record<string, number> = {
  */
 function parseDateTime(dateStr: string, timeStr: string): Date {
  try {
-  // Combine date and time strings
   const dateTimeStr = `${dateStr} ${timeStr}`;
-  // Parse the combined string (MM/DD/YYYY h:mm AM/PM)
   return new Date(dateTimeStr);
  } catch (error) {
   console.error(`Error parsing date/time: ${dateStr} ${timeStr}`, error);
-  return new Date(); // Fallback to current date
+  return new Date();
+ }
+}
+
+/**
+ * Parse date string (for expenses) into Date object
+ */
+function parseDate(dateStr: string): Date {
+ try {
+  return new Date(dateStr);
+ } catch (error) {
+  console.error(`Error parsing date: ${dateStr}`, error);
+  return new Date();
  }
 }
 
@@ -73,14 +89,11 @@ function parseDateTime(dateStr: string, timeStr: string): Date {
  */
 function formatPhoneNumber(phoneNum: number): string {
  try {
-  // Convert to string and handle 10-11 digit numbers
   let phoneStr = phoneNum.toString();
-  // Remove leading 1 if present (11-digit number)
   if (phoneStr.length === 11 && phoneStr.startsWith("1")) {
    phoneStr = phoneStr.substring(1);
   }
 
-  // Format as (XXX) XXX-XXXX
   if (phoneStr.length === 10) {
    return `(${phoneStr.substring(0, 3)}) ${phoneStr.substring(
     3,
@@ -88,7 +101,7 @@ function formatPhoneNumber(phoneNum: number): string {
    )}-${phoneStr.substring(6)}`;
   }
 
-  return phoneStr; // Return as-is if unexpected length
+  return phoneStr;
  } catch (error) {
   console.error("Error formatting phone number:", phoneNum, error);
   return phoneNum.toString();
@@ -106,17 +119,18 @@ function mapStatus(statusBool: boolean): "scheduled" | "completed" {
  * Estimate cost based on haircut type
  */
 function estimateCost(haircutType: string): number {
- return HAIRCUT_COSTS[haircutType] || 6; // Default to $6
+ return HAIRCUT_COSTS[haircutType] || 6;
 }
 
 /**
- * Transform webhook data to frontend format - now handles mixed data
+ * Transform webhook data to frontend format - handles appointments, expenses, and AI insights
  */
 export function transformWebhookData(webhookData: any[]): TransformedData {
  const appointments: Appointment[] = [];
+ const expenses: Expense[] = [];
  let aiInsights: AIInsights | null = null;
 
- // Separate appointments from AI insights
+ // Separate appointments, expenses, and AI insights
  webhookData.forEach((item) => {
   if (item.aiInsights) {
    // This is the AI insights object
@@ -147,16 +161,29 @@ export function transformWebhookData(webhookData: any[]): TransformedData {
     appointments.push(transformedAppointment);
    } catch (error) {
     console.error(`Error transforming appointment:`, error);
-    // Continue processing other appointments
+   }
+  } else if (item.amount && item.date && !item.clientName) {
+   // This is an expense object
+   try {
+    const transformedExpense: Expense = {
+     date: parseDate(item.date),
+     amount:
+      typeof item.amount === "number" ? item.amount : parseFloat(item.amount),
+    };
+    expenses.push(transformedExpense);
+   } catch (error) {
+    console.error(`Error transforming expense:`, error);
    }
   }
  });
 
  console.log(`✅ Transformed ${appointments.length} appointments`);
+ console.log(`✅ Transformed ${expenses.length} expenses`);
  console.log(`✅ AI insights ${aiInsights ? "found" : "not found"}`);
 
  return {
   appointments,
+  expenses,
   aiInsights,
  };
 }
@@ -167,6 +194,7 @@ export function transformWebhookData(webhookData: any[]): TransformedData {
 export async function fetchTransformedData(): Promise<{
  success: boolean;
  data: Appointment[];
+ expenses: Expense[];
  aiInsights: AIInsights | null;
  error?: string;
 }> {
@@ -191,18 +219,17 @@ export async function fetchTransformedData(): Promise<{
   const rawData = await response.json();
   console.log("📥 Raw webhook response:", rawData);
 
-  // Validate that we received an array
   if (!Array.isArray(rawData)) {
    throw new Error("Webhook returned non-array data");
   }
 
-  // Transform the data
   const transformedData = transformWebhookData(rawData);
   console.log("📊 Transformed data:", transformedData);
 
   return {
    success: true,
    data: transformedData.appointments,
+   expenses: transformedData.expenses,
    aiInsights: transformedData.aiInsights,
   };
  } catch (error) {
@@ -210,6 +237,7 @@ export async function fetchTransformedData(): Promise<{
   return {
    success: false,
    data: [],
+   expenses: [],
    aiInsights: null,
    error: error instanceof Error ? error.message : "Unknown error",
   };

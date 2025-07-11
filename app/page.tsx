@@ -32,6 +32,11 @@ interface AIInsights {
  status: string;
 }
 
+interface Expense {
+ date: Date;
+ amount: number;
+}
+
 // Mock inventory data (unchanged)
 const mockInventory: InventoryItem[] = [
  {
@@ -116,6 +121,7 @@ export default function BarberDashboard() {
  const [isConnectedToLiveData, setIsConnectedToLiveData] = useState(false);
  const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(null);
  const [connectionError, setConnectionError] = useState<string | null>(null);
+ const [expenses, setExpenses] = useState<Expense[]>([]);
 
  // Fetch data from webhook
  const fetchAppointments = async () => {
@@ -137,6 +143,7 @@ export default function BarberDashboard() {
 
     // Set appointments
     setAppointments(result.data);
+    setExpenses(result.expenses);
 
     // Set AI insights if available
     if (result.aiInsights) {
@@ -198,7 +205,14 @@ export default function BarberDashboard() {
   (sum, apt) => sum + apt.cost,
   0
  );
- const totalProfit = totalRevenue - totalCosts;
+
+  const totalExpenses = expenses.reduce(
+   (sum, expense) => sum + expense.amount,
+   0
+  );
+
+  const totalSpending = totalExpenses > 0 ? totalExpenses : 940;
+ const totalProfit = totalRevenue - totalSpending;
  const avgProfitPerCut =
   completedAppointments.length > 0
    ? Math.round(totalProfit / completedAppointments.length)
@@ -249,7 +263,7 @@ export default function BarberDashboard() {
 
  const dashboardStats: DashboardStats = {
   revenue: totalRevenue,
-  spending: 940,
+  spending: totalSpending,
   profit: totalProfit,
   totalBookings: {
    today: todayAppointments,
