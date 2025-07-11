@@ -8,6 +8,7 @@ export interface Appointment {
   price: number;
   cost: number; // Added for profit calculation
   status: 'scheduled' | 'completed' | 'cancelled' | 'no-show';
+  note: string;
 }
 
 export interface InventoryItem {

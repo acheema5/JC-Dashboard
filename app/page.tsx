@@ -97,6 +97,7 @@ const fallbackAppointments: Appointment[] = [
   price: 35,
   cost: 8,
   status: "scheduled",
+  note: "short",
  },
  {
   id: "2",
@@ -108,6 +109,7 @@ const fallbackAppointments: Appointment[] = [
   price: 25,
   cost: 5,
   status: "completed",
+  note: "quick fade",
  },
 ];
 
@@ -122,6 +124,8 @@ export default function BarberDashboard() {
  const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(null);
  const [connectionError, setConnectionError] = useState<string | null>(null);
  const [expenses, setExpenses] = useState<Expense[]>([]);
+ const [isRefreshing, setIsRefreshing] = useState(false);
+ const [lastRefreshTime, setLastRefreshTime] = useState<Date | null>(null);
 
  // Fetch data from webhook
  const fetchAppointments = async () => {
@@ -129,6 +133,7 @@ export default function BarberDashboard() {
    setIsLoading(true);
    setConnectionError(null);
    console.log("🔄 Fetching data from webhook...");
+  
 
    const result = await fetchTransformedData();
 
@@ -182,6 +187,44 @@ export default function BarberDashboard() {
    console.log("📋 Using fallback mock data");
   } finally {
    setIsLoading(false);
+  }
+ };
+
+ const handleRefreshData = async () => {
+  try {
+   setIsRefreshing(true);
+   console.log("🔄 Triggering data refresh...");
+
+   // Call the n8n webhook to trigger haircut_scraping workflow
+   const refreshResponse = await fetch(
+    process.env.NEXT_PUBLIC_N8N_REFRESH_WEBHOOK_URL!,
+    {
+     method: "GET",
+     headers: {
+      Accept: "application/json",
+     },
+    }
+   );
+
+   if (!refreshResponse.ok) {
+    throw new Error(`Refresh failed: ${refreshResponse.status}`);
+   }
+
+   const refreshResult = await refreshResponse.json();
+   console.log("✅ Data refresh completed:", refreshResult);
+
+   // Wait a moment for data to be processed, then fetch updated appointments
+   setTimeout(() => {
+    fetchAppointments();
+   }, 3000);
+
+   setLastRefreshTime(new Date());
+   alert("Data refresh completed successfully!");
+  } catch (error) {
+   console.error("❌ Data refresh failed:", error);
+   alert("Data refresh failed. Please try again.");
+  } finally {
+   setIsRefreshing(false);
   }
  };
 
@@ -395,6 +438,40 @@ export default function BarberDashboard() {
      </span>
     </div>
 
+    {lastRefreshTime && (
+     <span className="text-xs text-gray-500">
+      Last refresh: {lastRefreshTime.toLocaleTimeString()}
+     </span>
+    )}
+
+    <div className="flex items-center space-x-3">
+     {/* Refresh Data Button */}
+     <button
+      onClick={handleRefreshData}
+      disabled={isRefreshing}
+      className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+       isRefreshing
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-blue-600 hover:bg-blue-700 text-white"
+      }`}
+     >
+      <svg
+       className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
+       fill="none"
+       stroke="currentColor"
+       viewBox="0 0 24 24"
+      >
+       <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+       />
+      </svg>
+      <span>{isRefreshing ? "Refreshing..." : "Refresh Data"}</span>
+     </button>
+    </div>
+
     {lastUpdateTime && (
      <span className="text-sm text-gray-500">
       Last updated: {lastUpdateTime.toLocaleTimeString()}
@@ -444,6 +521,7 @@ export default function BarberDashboard() {
      time={nextAppointment?.date || new Date()}
      duration={nextAppointment?.duration || 0}
      phoneNumber={nextAppointment?.phoneNumber || ""}
+     note={nextAppointment?.note || ""}
     />
     <AppointmentsOverviewCard
      stats={dashboardStats}

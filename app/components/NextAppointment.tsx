@@ -23,6 +23,7 @@ export function NextAppointment({ nextAppointment }: NextAppointmentProps) {
       time={nextAppointment.date}
       duration={nextAppointment.duration}
       phoneNumber={nextAppointment.phoneNumber}
+      note={nextAppointment.clientName}
     />
   );
 }

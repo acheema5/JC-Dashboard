@@ -22,6 +22,7 @@ export interface Appointment {
  price: number;
  cost: number;
  status: "scheduled" | "completed";
+ note: string;
 }
 
 export interface Expense {
@@ -157,6 +158,7 @@ export function transformWebhookData(webhookData: any[]): TransformedData {
      price: item.price,
      cost: estimateCost(item.haircutType),
      status: mapStatus(item.status),
+     note: item.note
     };
     appointments.push(transformedAppointment);
    } catch (error) {
