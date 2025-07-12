@@ -99,8 +99,7 @@ export function AIInsightsCard({
   <div className="flex items-center justify-between">
    <div className="flex items-center space-x-4">
     <div className="flex items-center space-x-2">
-     <SparklesIcon className="w-5 h-5 text-purple-600" />
-     <span className="text-sm font-medium">Performance Score</span>
+     <span className="font-semibold text-blue-800">Performance Score:</span>
     </div>
     <div className="flex items-center space-x-2">
      <span

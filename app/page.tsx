@@ -388,6 +388,7 @@ export default function BarberDashboard() {
 
  return (
   <div className="min-h-screen bg-gray-100 p-4">
+    <div className="container mx-auto px-4 py-4">
    {/* Google Sheets Link */}
    <div className="mb-4 flex justify-end">
     <a
@@ -490,7 +491,7 @@ export default function BarberDashboard() {
    </div>
 
    {/* Row 1: Quick Stats */}
-   <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
     <QuickStatsCard
      type="revenue"
      stats={dashboardStats}
@@ -503,11 +504,6 @@ export default function BarberDashboard() {
     />
     <QuickStatsCard
      type="profit"
-     stats={dashboardStats}
-     appointments={appointments}
-    />
-    <QuickStatsCard
-     type="bookings"
      stats={dashboardStats}
      appointments={appointments}
     />
@@ -549,19 +545,13 @@ export default function BarberDashboard() {
       onSendSMS={handleSendSMS}
       onCreatePromotion={handleCreatePromotion}
      />
-     <InventoryTrackingCard
-      inventory={inventory}
-      onReorder={handleReorderItem}
-      onUpdateThreshold={handleUpdateThreshold}
-      onToggleAutoReorder={handleToggleAutoReorder}
-     />
-     <DataExportCard onExport={handleExportCSV} onExportCSV={handleExportCSV} />
     </div>
    </div>
-
+   
    {/* Row 4: Full Width Weekly Schedule */}
-   <div className="max-w-[1800px] mx-auto px-4 mt-8">
+   <div className="grid grid-cols-1 mt-6">
     <ScheduleCard appointments={appointments} />
+    </div>
    </div>
   </div>
  );
