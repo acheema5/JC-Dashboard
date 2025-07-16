@@ -22,33 +22,42 @@ export function AppointmentsOverviewCard({
   >("all");
 
   const getFilteredAppointments = () => {
-    const now = new Date();
-    let filteredByTime: Appointment[] = [];
+   const now = new Date();
+   let filteredByTime: Appointment[] = [];
 
-    switch (viewMode) {
-      case "today":
-        filteredByTime = appointments.filter(
-          (apt) => apt.date.toDateString() === now.toDateString()
-        );
-        break;
-      case "week":
-        const weekStart = new Date(now);
-        weekStart.setDate(now.getDate() - now.getDay());
-        filteredByTime = appointments.filter((apt) => apt.date >= weekStart);
-        break;
-      case "month":
-        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-        filteredByTime = appointments.filter((apt) => apt.date >= monthStart);
-        break;
-      case "year":
-        const yearStart = new Date(now.getFullYear(), 0, 1);
-        filteredByTime = appointments.filter((apt) => apt.date >= yearStart);
-        break;
-    }
+   switch (viewMode) {
+    case "today":
+     filteredByTime = appointments.filter(
+      (apt) => apt.date.toDateString() === now.toDateString()
+     );
+     break;
+    case "week":
+     const weekStart = new Date(now);
+     weekStart.setDate(now.getDate() - now.getDay());
+     filteredByTime = appointments.filter((apt) => apt.date >= weekStart);
+     break;
+    case "month":
+     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+     filteredByTime = appointments.filter((apt) => apt.date >= monthStart);
+     break;
+    case "year":
+     const yearStart = new Date(now.getFullYear(), 0, 1);
+     filteredByTime = appointments.filter((apt) => apt.date >= yearStart);
+     break;
+   }
 
-    if (statusFilter === "all") return filteredByTime;
-    return filteredByTime.filter((apt) => apt.status === statusFilter);
+   // Filter by status
+   let statusFiltered =
+    statusFilter === "all"
+     ? filteredByTime
+     : filteredByTime.filter((apt) => apt.status === statusFilter);
+
+   // Sort by date and time (earlier to later)
+   return statusFiltered.sort((a, b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+   });
   };
+
 
   const filteredAppointments = getFilteredAppointments();
   const totalRevenue = filteredAppointments
