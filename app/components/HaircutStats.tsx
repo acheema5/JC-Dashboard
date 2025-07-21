@@ -106,7 +106,9 @@ export function HaircutStats({ stats, appointments }: HaircutStatsProps) {
                         </DialogTrigger>
                         <DialogContent className="max-w-lg">
                           <DialogHeader>
-                            <DialogTitle className="text-teal-800 font-bold">{cut} - Weekly Breakdown</DialogTitle>
+                            <DialogTitle>
+                              <div className="text-teal-800 font-bold">{cut} - Weekly Breakdown</div>
+                            </DialogTitle>
                           </DialogHeader>
                           {selectedCut === cut && (
                             <div className="bg-gradient-to-br from-white to-teal-50 p-4 rounded-xl border border-teal-100 shadow-sm space-y-4">
