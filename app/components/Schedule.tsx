@@ -18,12 +18,12 @@ const fullWeekdays = [
   "Sunday",
 ];
 
-const timeSlots = Array.from({ length: 9 }, (_, i) => {
-  const hour = 10 + i;
+// Extended to 11-hour day: 9 AM to 8 PM
+const timeSlots = Array.from({ length: 11 }, (_, i) => {
+  const hour = 9 + i;
   return {
     hour24: hour,
-    display:
-      hour === 12 ? "12 PM" : hour > 12 ? `${hour - 12} PM` : `${hour} AM`,
+    display: hour === 12 ? "12 PM" : hour > 12 ? `${hour - 12} PM` : `${hour} AM`,
     time: `${hour}:00`,
   };
 });
@@ -32,6 +32,7 @@ export function Schedule({ appointments }: ScheduleProps) {
   const today = new Date();
   const dayOfWeek = today.getDay();
   const monday = new Date(today);
+  // Calculate Monday (dayOfWeek 1 means Monday, 0 is Sunday)
   monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7));
   monday.setHours(0, 0, 0, 0);
 
@@ -72,43 +73,53 @@ export function Schedule({ appointments }: ScheduleProps) {
     const startHour = appointment.date.getHours();
     const startMinute = appointment.date.getMinutes();
     const startDecimal = startHour + startMinute / 60;
-    const topPercent = ((startDecimal - 10) / 8) * 100;
-    const heightPercent = (appointment.duration / 60 / 8) * 100;
+
+    // 9 AM to 8 PM = 11-hour range
+    const topPercent = ((startDecimal - 9) / 11) * 100;
+    const heightPercent = (appointment.duration / 60 / 11) * 100;
 
     return {
       top: `${Math.max(0, topPercent)}%`,
-      height: `${Math.max(heightPercent, 8)}%`,
+      height: `${Math.max(heightPercent, 6)}%`, // Minimum height for readability
     };
   };
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-blue-100 text-blue-800 h-full flex flex-col">
-      <div className="px-6 py-4 border-b border-blue-300">
-        <h1 className="text-4xl font-bold text-blue-800">Weekly Schedule</h1>
-        <p className="text-blue-600 text-sm mt-1">
+      {/* Compact Header */}
+      <div className="px-4 py-3 border-b border-blue-300 flex-shrink-0">
+        <h1 className="text-2xl font-bold text-blue-800">Weekly Schedule</h1>
+        <p className="text-blue-600 text-xs mt-0.5">
           {weekDates[0].toLocaleDateString("en-US", {
-            month: "long",
+            month: "short",
             day: "numeric",
           })}{" "}
           -{" "}
           {weekDates[6].toLocaleDateString("en-US", {
-            month: "long",
+            month: "short",
             day: "numeric",
             year: "numeric",
           })}
         </p>
       </div>
 
-      <div className="flex-1 flex overflow-hidden">
-        <div className="w-20 flex-shrink-0 border-r border-blue-300">
-          <div className="h-16 border-b border-blue-300"></div>
-          <div className="relative">
-            {timeSlots.map((slot) => (
+      <div className="flex-1 flex overflow-hidden h-full">
+        {/* Time labels - more compact */}
+        <div className="w-16 flex-shrink-0 border-r border-blue-300 flex flex-col">
+          {/* Compact header spacer - no bottom border to avoid cutting 9am */}
+          <div className="h-12 flex-shrink-0"></div>
+          <div className="flex-1 relative">
+            {timeSlots.map((slot, index) => (
               <div
                 key={slot.hour24}
-                className="h-20 border-b border-blue-300 flex items-start justify-end pr-3 pt-2"
+                className="absolute w-full flex items-start justify-end pr-2"
+                style={{ 
+                  top: `${(index * 100) / timeSlots.length}%`,
+                  height: `${100 / timeSlots.length}%`,
+                  transform: 'translateY(-6px)' // Move up to align with grid line
+                }}
               >
-                <span className="text-sm text-blue-600 font-medium">
+                <span className="text-xs text-blue-600 font-medium select-none leading-none">
                   {slot.display}
                 </span>
               </div>
@@ -116,6 +127,7 @@ export function Schedule({ appointments }: ScheduleProps) {
           </div>
         </div>
 
+        {/* Days grid */}
         <div className="flex-1 grid grid-cols-7 divide-x divide-blue-300">
           {weekDates.map((date, dayIndex) => {
             const dayName = fullWeekdays[dayIndex];
@@ -126,49 +138,54 @@ export function Schedule({ appointments }: ScheduleProps) {
 
             return (
               <div key={dayIndex} className="flex flex-col min-w-0">
+                {/* Compact day header */}
                 <div
                   className={clsx(
-                    "h-16 border-b border-blue-300 flex flex-col items-center justify-center",
+                    "h-12 border-b border-blue-300 flex flex-col items-center justify-center",
                     isToday ? "bg-blue-200" : "bg-white/60"
                   )}
                 >
-                  <div className="text-sm font-medium text-blue-800">
+                  <div className="text-xs font-medium text-blue-800">
                     {weekdays[dayIndex]}
                   </div>
-                  <div className="text-xs text-blue-600 mt-1">
-                    {date.getDate()}
-                  </div>
+                  <div className="text-xs text-blue-600">{date.getDate()}</div>
                 </div>
 
+                {/* Day body */}
                 <div className="flex-1 relative">
+                  {/* Hour grid lines - aligned with time labels */}
                   {timeSlots.map((slot, index) => (
                     <div
                       key={slot.hour24}
-                      className="absolute w-full h-20 border-b border-blue-200"
-                      style={{ top: `${index * 80}px` }}
+                      className="absolute w-full border-b border-blue-200"
+                      style={{
+                        top: `${(index * 100) / timeSlots.length}%`,
+                        height: `${100 / timeSlots.length}%`,
+                      }}
                     />
                   ))}
 
+                  {/* Appointments - properly aligned */}
                   {appointmentsByDay[dayName].map((apt) => {
                     const position = getAppointmentPosition(apt);
                     return (
                       <div
                         key={apt.id}
-                        className="absolute left-1 right-1 bg-blue-600 rounded-md border-l-4 border-blue-400 shadow-sm hover:bg-blue-700 transition-colors cursor-pointer overflow-hidden"
+                        className="absolute left-0.5 right-0.5 bg-blue-600 rounded-sm border-l-2 border-blue-400 shadow-sm hover:bg-blue-700 transition-colors cursor-pointer overflow-hidden"
                         style={{
                           top: position.top,
                           height: position.height,
-                          minHeight: "40px",
+                          minHeight: "24px",
                         }}
                       >
-                        <div className="p-2 h-full flex flex-col justify-start text-left">
-                          <div className="text-xs font-semibold text-white mb-1">
+                        <div className="p-1 h-full flex flex-col justify-start text-left">
+                          <div className="text-xs font-semibold text-white leading-tight truncate">
                             {apt.date.toLocaleTimeString([], {
                               hour: "numeric",
                               minute: "2-digit",
                             })}
                           </div>
-                          <div className="text-xs text-blue-100 truncate">
+                          <div className="text-xs text-blue-100 truncate leading-tight">
                             {apt.clientName}
                           </div>
                         </div>
