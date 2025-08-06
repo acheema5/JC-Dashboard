@@ -18,9 +18,9 @@ const fullWeekdays = [
   "Sunday",
 ];
 
-// Extended to 11-hour day: 9 AM to 8 PM
-const timeSlots = Array.from({ length: 11 }, (_, i) => {
-  const hour = 9 + i;
+// Extended to 12-hour day: 8 AM to 8 PM
+const timeSlots = Array.from({ length: 12 }, (_, i) => {
+  const hour = 8 + i;
   return {
     hour24: hour,
     display: hour === 12 ? "12 PM" : hour > 12 ? `${hour - 12} PM` : `${hour} AM`,
@@ -74,9 +74,9 @@ export function Schedule({ appointments }: ScheduleProps) {
     const startMinute = appointment.date.getMinutes();
     const startDecimal = startHour + startMinute / 60;
 
-    // 9 AM to 8 PM = 11-hour range
-    const topPercent = ((startDecimal - 9) / 11) * 100;
-    const heightPercent = (appointment.duration / 60 / 11) * 100;
+    // 8 AM to 8 PM = 12-hour range
+    const topPercent = ((startDecimal - 8) / 12) * 100;
+    const heightPercent = (appointment.duration / 60 / 12) * 100;
 
     return {
       top: `${Math.max(0, topPercent)}%`,
